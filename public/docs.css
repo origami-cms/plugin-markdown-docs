@@ -3759,7 +3759,6 @@ article {
       background: white;
       border: 2px solid var(--color-grey-300);
       box-shadow: 0 0.1rem 0.2rem var(--color-grey-200);
-      margin-left: calc(var(--size-tiny) * -1.75);
       margin-right: calc(var(--size-tiny) * 1); }
   article a.made-by {
     display: block;
