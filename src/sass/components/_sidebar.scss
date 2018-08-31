@@ -1,0 +1,99 @@
+aside.card {
+    padding: 0;
+    width: var(--sidebar-width);
+    --indent: 1rem;
+
+    img.logo {
+        height: var(--size-main);
+        margin: var(--size-small);
+        display: inline-block;
+    }
+
+    span.title {
+        display: none;
+    }
+
+    li {
+        display: block;
+        span, a {
+            display: block;
+            height: var(--size-main);
+            line-height: var(--size-main);
+            padding: 0 calc(var(--indent) * 2);
+            @extend %ellipsis;
+            font-size: var(--font-size-small);
+            transition: all calc(var(--transition-time) / 2);
+
+            &.active {
+                color: var(--color-active);
+                background-color: var(--color-active-soft);
+                border-right: 0.4rem solid var(--color-active);
+            }
+
+            &.color-grey-300:hover {
+                color: var(--color-grey-400);
+            }
+
+            &:hover:not(.active) {
+                background-color: var(--color-main-soft);
+            }
+
+            &.depth-0 {
+                text-transform: uppercase;
+                font-weight: 600;
+                letter-spacing: 1px;
+                font-size: var(--font-size-tiny);
+            }
+        }
+        @for $i from 1 through 10 {
+            *.depth-#{$i} {
+                padding-left: calc(#{$i + 2} * var(--indent));
+            }
+        }
+    }
+}
+
+// Mobile
+@media #{$mq-tiny-up} {
+    html {
+        --sidebar-width: 50%;
+    }
+    aside.card{
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        transform: translate(-100%);
+        transition: all var(--transition-time);
+        z-index: 99;
+
+        &.active {
+            transform: none;
+        }
+    }
+}
+
+@media #{$mq-sidebar} {
+    aside.card {
+        transform: none;
+
+        button {
+            display: none;
+        }
+    }
+    article {
+        margin-left: var(--sidebar-width);
+    }
+}
+
+@media #{$mq-large-up} {
+    html {
+        --sidebar-width: 30rem;
+    }
+
+    aside.card {
+        span.title {
+            display: inline-block;
+        }
+    }
+}

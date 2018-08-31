@@ -1,0 +1,5 @@
+pre {
+    @extend %rounded;
+    background-color: var(--color-grey-800);
+    box-shadow: 0 0.5rem 2rem var(--color-grey-300);
+}

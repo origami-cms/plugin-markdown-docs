@@ -1,0 +1,19 @@
+header {
+    @extend %comp-card;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--size-large);
+    line-height: var(--size-large);
+
+    svg.i {
+        margin-left: var(--size-small);
+    }
+}
+
+@media #{$mq-sidebar} {
+    header {
+        display: none;
+    }
+}
