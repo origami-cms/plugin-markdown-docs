@@ -3659,6 +3659,7 @@ header {
 
 aside.card {
   padding: 0;
+  width: var(--sidebar-width);
   --indent: 1rem; }
   aside.card img.logo {
     height: var(--size-main);
@@ -3711,19 +3712,23 @@ aside.card {
 
 @media only screen {
   html {
-    --sidebar-width: 20rem; }
+    --sidebar-width: 50%; }
   aside.card {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
     height: 100%;
-    transform: translate(-100%); } }
+    transform: translate(-100%);
+    transition: all var(--transition-time);
+    z-index: 99; }
+    aside.card.active {
+      transform: none; } }
 
 @media only screen and (min-width: 560px) {
   aside.card {
-    transform: none;
-    width: var(--sidebar-width); }
+    transform: none; }
+    aside.card button {
+      display: none; }
   article {
     margin-left: var(--sidebar-width); } }
 

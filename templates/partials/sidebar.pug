@@ -23,6 +23,10 @@ aside.card
     if (data.siteTitle)
         span.title.align-middle= data.siteTitle
 
+    button.hollow.float-right.margin-small
+        svg.i.grey-300(onclick="document.querySelector('aside').classList.toggle('active')")
+            use(xlink:href="/docs/icons.svg#zen-icon-cross")
+
     ul
         //- Don't show the root tree node (results in many 1st level items)
         if (data.sidebarSkipRoot && data.tree.children)
