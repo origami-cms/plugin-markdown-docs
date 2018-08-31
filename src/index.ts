@@ -9,7 +9,6 @@ import { directoryTree, lookupFile } from './lib';
 import toc from 'markdown-toc';
 import {parse} from 'url';
 
-
 const markdown = promisify(marked);
 const fsRead = promisify(fs.readFile);
 
@@ -82,11 +81,14 @@ module.exports = (app: Server, options = {}) => {
 
             if (file) {
                 const md = (await fsRead(file)).toString();
+
                 // @ts-ignore
                 const body = await markdown(md);
                 const headings: object = toc(md).json;
 
                 res.data = {
+                    // @ts-ignore
+                    title: headings[0].content,
                     body,
                     tree,
                     css: settings.cssHREF || DEFAULT_CSS_HREF,

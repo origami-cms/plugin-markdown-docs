@@ -80,6 +80,7 @@ The theme template will be rendered with all the needed data on the response obj
 
 | Option | Type | Description |
 |-|-|-|
+| `title` | `string` | The first heading on the page |
 | `body` | `string` | The markdown rendered into a HTML string |
 | `tree` | `object` | A recursive tree of the entire file structure supplied in the `directory` option|
 | `css` | `string` | A URL to the css sheet |

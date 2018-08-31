@@ -3,7 +3,7 @@ mixin sidebar-item(item, depth=0)
 
     li
         if (active)
-            span.active(class=`depth-${depth}`)= item.title
+            a.active(class=`depth-${depth}` href=`#${data.headings[0].slug}`)= item.title
         else
             a(href=item.path class=`depth-${depth} color-grey-300`)= item.title
 
