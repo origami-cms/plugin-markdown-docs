@@ -5,6 +5,7 @@ import Server from 'origami-core-server';
 import path from 'path';
 import { promisify } from 'util';
 import { directoryTree, lookupFile } from './lib';
+// @ts-ignore
 import toc from 'markdown-toc';
 import {parse} from 'url';
 
@@ -21,6 +22,8 @@ export interface MarkdownDocsSettings {
     sidebarSkipRoot?: boolean;
     logo?: string;
     siteTitle?: string;
+    cache?: boolean;
+    colors?: {[color: string]: string};
 }
 
 let settings: MarkdownDocsSettings;
@@ -31,7 +34,8 @@ const DEFAULT_OPTIONS: MarkdownDocsSettings = {
     themeTemplate: false,
     cssFile: path.resolve(__dirname, './docs.css'),
     sidebarSkipRoot: true,
-    siteTitle: 'Documentation'
+    siteTitle: 'Documentation',
+    cache: true
 };
 
 
@@ -46,9 +50,14 @@ const CACHE: { [url: string]: string | false } = {};
 module.exports = (app: Server, options = {}) => {
     settings = {...DEFAULT_OPTIONS, ...options};
 
+    // Statically host the public directory
+    app.static(path.resolve(__dirname, '../public'), settings.prefix);
+
+
     const r = new Route(`${settings.prefix}/*`);
 
 
+    // If the /xyz?nocache query string is present, clear the cache for that URL
     r.position('pre-store').get((req, res, next) => {
         if (req.query.nocache !== undefined) {
             CACHE[parse(req.originalUrl).pathname!] = false;
@@ -73,6 +82,7 @@ module.exports = (app: Server, options = {}) => {
 
             if (file) {
                 const md = (await fsRead(file)).toString();
+                // @ts-ignore
                 const body = await markdown(md);
                 const headings: object = toc(md).json;
 
@@ -84,8 +94,9 @@ module.exports = (app: Server, options = {}) => {
                     url,
                     siteTitle: settings.siteTitle,
                     sidebarSkipRoot: settings.sidebarSkipRoot,
-                    logo: settings.logo
-                };
+                    logo: settings.logo,
+                    colors: settings.colors
+                } as {[key: string]: any};
 
                 // Used for origami-app-theme
                 if (settings.themeTemplate) {
@@ -104,31 +115,33 @@ module.exports = (app: Server, options = {}) => {
         .position('render')
         .get(async(req, res, next) => {
             const url = parse(req.originalUrl).pathname!;
-            let cachedPage = CACHE[url];
+            let page = CACHE[url];
 
 
             // Handle with origami-app-theme
-            if (!cachedPage && (res.headersSent || res.isPage || !res.data || !res.data.body)) {
+            // @ts-ignore
+            if (!page && (res.headersSent || res.isPage || !res.data || !res.data.body)) {
                 return next();
             }
 
-            if (!cachedPage) {
-                cachedPage = CACHE[url] = await renderer.render(TEMPLATE, {data: res.data}) as string;
+            if (!page || settings.cache === false) {
+                page = await renderer.render(TEMPLATE, {data: res.data}) as string;
+                if (settings.cache) CACHE[url] = page;
             }
 
-            if (cachedPage) res.body = cachedPage as string;
+            if (page) res.body = page as string;
             next();
         });
 
+
+    // If there's a path to a custom css file given, host it statically
     if (settings.cssFile && !settings.cssHREF) {
         const cssRoute = new Route(DEFAULT_CSS_HREF)
             .position('pre-send')
-            .get((req, res) => res.sendFile(settings.cssFile));
+            .get((req, res) => res.sendFile(settings.cssFile!));
         app.useRouter(cssRoute);
     }
 
 
     app.useRouter(r);
-
-    app.static(path.resolve(__dirname, '../public'), settings.prefix);
 };

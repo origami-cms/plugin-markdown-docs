@@ -23,16 +23,38 @@ In your `.origami` file, add this to your `plugins`:
 
 ## Options:
 
-| Option | Type | Required | Default | Description |
+| Option | Type | Default | Description |
 |-|-|-|-|-|
-| `directory` | `string` | No | `'docs'` | Directory for the markdown files to read |
-| `prefix` | `string` | No | `'/docs'` | URL prefix for serving the documentation |
-| `themeTemplate` |  `string`, `false` | No | `false` | Pass the response data to [origami-app-theme](https://github.com/origami-cms/app-theme) to render  |
-| `cssFile` |  `string` | No | `/docs/docs.css` | The path to the css file to include in each article |
-| `cssHREF` |  `string` | No |  | Override the default css file with a custom stylesheet link |
-| `sidebarSkipRoot` |  `boolean` | No | `true` | Don't include the root level folder in the sidebar |
-| `logo` |  `string` | No | `true` | URL of the logo to display at the top of the sidebar |
-| `siteTitle` |  `string` | No | `'Documentation` | Title of the sidebar next to the logo |
+| `directory` | `string` | `'docs'` | Directory for the markdown files to read |
+| `prefix` | `string` | `'/docs'` | URL prefix for serving the documentation |
+| `themeTemplate` |  `string`, `false` | `false` | Pass the response data to [origami-app-theme](https://github.com/origami-cms/app-theme) to render  |
+| `cssFile` |  `string` | `/docs/docs.css` | The path to the css file to include in each article |
+| `cssHREF` |  `string` |  | Override the default css file with a custom stylesheet link |
+| `sidebarSkipRoot` |  `boolean` | `true` | Don't include the root level folder in the sidebar |
+| `logo` |  `string` | `true` | URL of the logo to display at the top of the sidebar |
+| `siteTitle` |  `string` | `'Documentation'` | Title of the sidebar next to the logo |
+| `cache` |  `boolean` | `true` | Enable caching (Recommended) |
+| `colors` |  `object` | `false` | Key value pair for overriding colors |
+
+
+### Example
+```json
+{
+    ...
+    "plugins": {
+        "markdown-docs": {
+            "directory": "./site/docs",
+            "prefix": "docs/v1/",
+            "logo": "/logo.svg",
+            "siteTitle": "My docs",
+            "colors": {
+                "main": "red",
+                "blue": "#0000ff"
+            }
+        }
+    }
+    ...
+}
 
 
 ## Integration with `origami-app-theme`
@@ -66,6 +88,7 @@ The theme template will be rendered with all the needed data on the response obj
 | `sidebarSkipRoot` | `boolean` | See `sidebarSkipRoot` in the options |
 | `logo` |  `string` | See `logo` in the options |
 | `siteTitle` |  `string` | See `siteTitle` in the options |
+| `colors` |  `object` | See `colors` in the options |
 
 
 ## Caching

@@ -2022,6 +2022,19 @@ origami-core-lib@^0.3.13-alpha.1:
     jsonwebtoken "^8.3.0"
     marked "^0.3.6"
 
+origami-core-lib@^0.3.13-alpha.2:
+  version "0.3.13-alpha.2"
+  resolved "https://registry.yarnpkg.com/origami-core-lib/-/origami-core-lib-0.3.13-alpha.2.tgz#fb8ce993ad8deee16506b2d9637681fb218b13e4"
+  dependencies:
+    "@types/express" "^4.11.1"
+    bcrypt "^2.0.1"
+    deepmerge "^2.1.1"
+    dot-object "^1.7.0"
+    find-root "^1.1.0"
+    import-from "^2.1.0"
+    jsonwebtoken "^8.3.0"
+    marked "^0.3.6"
+
 origami-core-server-statuses@^0.0.8:
   version "0.0.8"
   resolved "https://registry.yarnpkg.com/origami-core-server-statuses/-/origami-core-server-statuses-0.0.8.tgz#683e8ca0d30886df8986543ca439f008f4709885"
@@ -2704,7 +2717,7 @@ rimraf@2, rimraf@^2.6.1:
   dependencies:
     glob "^7.0.5"
 
-"router@github:blakeembrey/router#router-engine":
+router@blakeembrey/router#router-engine:
   version "1.1.4"
   resolved "https://codeload.github.com/blakeembrey/router/tar.gz/5eb68560e91b302251ff17a70cd1b6af1fc36d30"
   dependencies:

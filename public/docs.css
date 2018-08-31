@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css?family=Work+Sans:300,400,600");
 pre {
   border-radius: var(--border-radius); }
 
@@ -3764,7 +3765,8 @@ article {
     display: block;
     margin-top: var(--size-large);
     font-size: var(--font-size-tiny);
-    opacity: 0.5; }
+    opacity: 0.5;
+    text-align: center; }
     article a.made-by img {
       width: 3rem;
       margin-right: 1rem;
