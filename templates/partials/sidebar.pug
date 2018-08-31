@@ -15,7 +15,7 @@ mixin sidebar-item(item, depth=0)
             ul.toc
                 for heading in data.headings
                     li
-                        a(class=`depth-${depth + 1}` href=`#${heading.slug}`)= heading.content
+                        a(class=`depth-${depth + 1} h${heading.lvl}` href=`#${heading.slug}`)= heading.content
 
 aside.card
     if (data.logo)

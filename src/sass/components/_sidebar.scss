@@ -50,13 +50,19 @@ aside.card {
                 padding-left: calc(#{$i + 2} * var(--indent));
             }
         }
+
+        .toc {
+            a:not(.h1) {
+                font-size: var(--font-size-tiny);
+            }
+        }
     }
 }
 
 // Mobile
 @media #{$mq-tiny-up} {
     html {
-        --sidebar-width: 50%;
+        --sidebar-width: 30rem;
     }
     aside.card{
         position: fixed;
@@ -74,6 +80,9 @@ aside.card {
 }
 
 @media #{$mq-sidebar} {
+    html {
+        --sidebar-width: 25rem;
+    }
     aside.card {
         transform: none;
 
@@ -90,7 +99,6 @@ aside.card {
     html {
         --sidebar-width: 30rem;
     }
-
     aside.card {
         span.title {
             display: inline-block;
