@@ -1,0 +1,34 @@
+mixin sidebar-item(item, depth=0)
+    - const active = data.url === item.path
+
+    li
+        if (active)
+            span.active(class=`depth-${depth}`)= item.title
+        else
+            a(href=item.path class=`depth-${depth} color-grey-300`)= item.title
+
+        if (item.children)
+            ul
+                for child in item.children
+                    +sidebar-item(child, depth + 1)
+        if (active && item.type === 'file')
+            ul.toc
+                for heading in data.headings
+                    li
+                        a(class=`depth-${depth + 1}` href=`#${heading.slug}`)= heading.content
+
+aside.card
+    if (data.logo)
+        img.logo.align-middle(src=data.logo alt="Logo")
+    if (data.siteTitle)
+        span.title.align-middle= data.siteTitle
+
+    ul
+        //- Don't show the root tree node (results in many 1st level items)
+        if (data.sidebarSkipRoot && data.tree.children)
+            for child in data.tree.children
+                +sidebar-item(child)
+
+        //- Include the root tree node (results in only 1 1st level item)
+        else
+            +sidebar-item(data.tree)
