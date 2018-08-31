@@ -81,7 +81,6 @@ module.exports = (app: Server, options = {}) => {
 
             if (file) {
                 const md = (await fsRead(file)).toString();
-
                 // @ts-ignore
                 const body = await markdown(md);
                 const headings: object = toc(md).json;
@@ -128,6 +127,11 @@ module.exports = (app: Server, options = {}) => {
 
             if (!page || settings.cache === false) {
                 page = await renderer.render(TEMPLATE, {data: res.data}) as string;
+
+                // Hack for adding Prism.js's .command-line class to all bash
+                // <pre>'s and <code>'s
+                page = page.replace(/class="\s*language-bash"/gm, 'class="command-line language-bash"');
+
                 if (settings.cache) CACHE[url] = page;
             }
 

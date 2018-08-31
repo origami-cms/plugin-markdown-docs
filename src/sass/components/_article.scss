@@ -3,6 +3,10 @@ article {
     margin-bottom: var(--size-large);
     max-width: 80rem;
 
+    a {
+        color: var(--color-alt);
+        text-decoration: underline;
+    }
 
     h1 {
         margin-bottom: var(--size-main);
@@ -13,21 +17,58 @@ article {
         margin-bottom: var(--size-small);
     }
 
+    strong {
+        letter-spacing: 0;
+    }
 
-    ul li {
-        display: list-item;
+    p {
         line-height: 2;
-        &:before {
-            content: '';
-            display: inline-block;
-            width: calc(var(--size-tiny) / 2);
-            height: calc(var(--size-tiny) / 2);
-            border-radius: 50%;
-            background: white;
-            border: 2px solid var(--color-grey-300);
-            box-shadow: 0 0.1rem 0.2rem var(--color-grey-200);
-            // margin-left: calc(var(--size-tiny) * -1.75);
-            margin-right: calc(var(--size-tiny) * 1);
+        margin-bottom: var(--size-small);
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    pre {
+        margin: var(--size-small) 0;
+    }
+
+    code {
+        background-color: var(--prism-bg);
+        @extend %rounded;
+        padding: calc(var(--size-tiny) / 4) calc(var(--size-tiny) / 2);
+        font-family: var(--font-family-mono);
+        color: var(--prism-text);
+        font-size: var(--font-size-small);
+    }
+
+    blockquote {
+        @extend %comp-card;
+        border: 1px solid var(--color-active);
+        background: var(--color-active-soft);
+        margin-left: calc(var(--size-small) * -1);
+        margin-right: calc(var(--size-small) * -1);
+        box-shadow: none;
+    }
+
+
+    ul {
+        padding-left: var(--size-small);
+        li {
+            display: list-item;
+            line-height: 2;
+            &:before {
+                content: '';
+                display: inline-block;
+                width: calc(var(--size-tiny) / 2);
+                height: calc(var(--size-tiny) / 2);
+                border-radius: 50%;
+                background: white;
+                border: 2px solid var(--color-grey-300);
+                box-shadow: 0 0.1rem 0.2rem var(--color-grey-200);
+                margin-left: calc(var(--size-small) * -1);
+                margin-right: calc(var(--size-tiny) * 1);
+            }
         }
     }
 
@@ -38,6 +79,8 @@ article {
         font-size: var(--font-size-tiny);
         opacity: 0.5;
         text-align: center;
+        color: var(--color-main);
+        text-decoration: none;
 
         img {
             width: 3rem;

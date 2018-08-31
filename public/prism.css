@@ -11,7 +11,7 @@ pre[class*="language-"] {
 	color: var(--prism-text);
 	font-size: var(--font-size-small);
 	background: none;
-	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-family: var(--font-family-mono);
 	text-align: left;
 	white-space: pre;
 	word-spacing: normal;
@@ -33,7 +33,7 @@ pre[class*="language-"] {
 /* Code blocks */
 pre[class*="language-"] {
 	padding: 1em;
-	margin: .5em 0;
+	/* margin: .5em 0; */
 	overflow: auto;
 }
 
@@ -165,3 +165,40 @@ pre[class*="language-"].line-numbers > code {
 	text-align: right;
 }
 
+.command-line-prompt {
+	border-right: 2px solid var(--prism-line-numbers);
+	display: block;
+	float: left;
+	font-size: 100%;
+	letter-spacing: -1px;
+	margin-right: 1em;
+	pointer-events: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.command-line-prompt>span:before {
+	content: ' ';
+	display: block;
+	padding-right: 0.8em;
+}
+
+.command-line-prompt>span[data-user]:before {
+	content: "$";
+}
+
+.command-line-prompt>span[data-user="root"]:before {
+	content: "#";
+}
+
+.command-line-prompt>span[data-prompt]:before {
+	content: attr(data-prompt);
+}
+
+
+/* FIXES */
+pre code[class~="language-bash"] {
+	padding: 0;
+}

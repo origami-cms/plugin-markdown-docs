@@ -375,6 +375,7 @@ form {
   --color-main-dark: #68398f;
   --color-main-soft: rgba(105, 58, 145, 0.1);
   --color-alt: var(--color-orange, #ff791f);
+  --color-alt-light: #ffe4d2;
   --color-error: var(--color-red, #ff5554);
   --color-success: var(--color-green, #28c787);
   --color-active: var(--color-blue, #23a8e6);
@@ -383,6 +384,7 @@ form {
   --color-text: var(--color-grey-900, #443750);
   --color-bg: #f8f8ff;
   --color-hover: var(--color-grey-50, #f8f8ff);
+  --color-yellow-light: #fef7e8;
   --h1-font-size: var(--font-size-super, 4.8rem);
   --h1-font-family: var(--font-family-headings, "Work Sans", serif);
   --h1-color: var(--color-main, );
@@ -447,7 +449,8 @@ form {
   --menu-padding: var(--size-small, 2rem);
   --loading-border: 0.2rem solid var(--color-grey-200, #eae3f0);
   --loading-color: var(--color-white, white);
-  --loading-size: var(--size-main, 4rem); }
+  --loading-size: var(--size-main, 4rem);
+  --hr-color: var(--color-grey-100, #f5f5f5); }
 
 * {
   box-sizing: border-box;
@@ -2439,7 +2442,7 @@ hr {
   display: block;
   height: 2px;
   border: none;
-  background-color: var(--color-grey-100, #f5f5f5);
+  background-color: var(--hr-color, var(--color-grey-100, #f5f5f5));
   margin: var(--size-main, 4rem) 0; }
 
 .hide {
