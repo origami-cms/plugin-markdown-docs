@@ -50,7 +50,7 @@ export const directoryTree = (base: string, prefix = '') => {
         return c;
     };
 
-    const tree = dt(base, {extensions: /\.md/}, (item: any) => {
+    const tree = dt(base, {extensions: /\.md/, exclude: /\/index\.md/}, (item: any) => {
         // tslint:disable-next-line no-magic-numbers
         item.name = item.name.slice(0, -3);
         delete item.extension;
