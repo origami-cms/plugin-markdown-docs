@@ -15,7 +15,7 @@ mixin sidebar-item(item, depth=0)
                     +sidebar-item(child, depth + 1)
         if (active && item.type === 'file')
             ul.toc
-                for heading in data.headings
+                for heading in data.headings.filter(h => h.lvl > 1)
                     li
                         a(class=`depth-${depth + 1} h${heading.lvl}` href=`#${heading.slug}`)= heading.content
 
