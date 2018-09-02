@@ -84,6 +84,7 @@ module.exports = (app: Server, options = {}) => {
                 const md = (await fsRead(file)).toString();
                 // @ts-ignore
                 const body = await markdown(md);
+
                 let headings: object[] | false = toc(md).json;
                 const originalTitle = startCase(file.split('/').pop().slice(0, -3));
                 if (!(headings as object[]).length) headings = false;
@@ -127,7 +128,7 @@ module.exports = (app: Server, options = {}) => {
 
                 // Handle with origami-app-theme
                 // @ts-ignore
-                if (!page && (res.headersSent || res.isPage || !res.data || !res.data.body)) {
+                if (!page && (res.headersSent || res.isPage || !res.data || res.data.body === undefined)) {
                     return next();
                 }
 
