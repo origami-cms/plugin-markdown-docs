@@ -8,6 +8,7 @@ import { directoryTree, lookupFile } from './lib';
 // @ts-ignore
 import toc from 'markdown-toc';
 import {parse} from 'url';
+import {startCase} from 'lodash';
 
 const markdown = promisify(marked);
 const fsRead = promisify(fs.readFile);
@@ -83,11 +84,15 @@ module.exports = (app: Server, options = {}) => {
                 const md = (await fsRead(file)).toString();
                 // @ts-ignore
                 const body = await markdown(md);
-                const headings: object = toc(md).json;
+                let headings: object[] | false = toc(md).json;
+                const originalTitle = startCase(file.split('/').pop().slice(0, -3));
+                if (!(headings as object[]).length) headings = false;
 
                 res.data = {
-                    // @ts-ignore
-                    title: headings[0].content,
+                    title: (headings && headings[0])
+                        // @ts-ignore
+                        ? headings[0].content
+                        : originalTitle,
                     body,
                     tree,
                     css: settings.cssHREF || DEFAULT_CSS_HREF,
@@ -115,28 +120,32 @@ module.exports = (app: Server, options = {}) => {
     r
         .position('render')
         .get(async(req, res, next) => {
-            const url = parse(req.originalUrl).pathname!;
-            let page = CACHE[url];
+            try {
+                const url = parse(req.originalUrl).pathname!;
+                let page = CACHE[url];
 
 
-            // Handle with origami-app-theme
-            // @ts-ignore
-            if (!page && (res.headersSent || res.isPage || !res.data || !res.data.body)) {
-                return next();
+                // Handle with origami-app-theme
+                // @ts-ignore
+                if (!page && (res.headersSent || res.isPage || !res.data || !res.data.body)) {
+                    return next();
+                }
+
+                if (!page || settings.cache === false) {
+                    page = await renderer.render(TEMPLATE, {data: res.data}) as string;
+
+                    // Hack for adding Prism.js's .command-line class to all bash
+                    // <pre>'s and <code>'s
+                    page = page.replace(/class="\s*language-bash"/gm, 'class="command-line language-bash"');
+
+                    if (settings.cache) CACHE[url] = page;
+                }
+
+                if (page) res.body = page as string;
+                next();
+            } catch (e) {
+                next(e);
             }
-
-            if (!page || settings.cache === false) {
-                page = await renderer.render(TEMPLATE, {data: res.data}) as string;
-
-                // Hack for adding Prism.js's .command-line class to all bash
-                // <pre>'s and <code>'s
-                page = page.replace(/class="\s*language-bash"/gm, 'class="command-line language-bash"');
-
-                if (settings.cache) CACHE[url] = page;
-            }
-
-            if (page) res.body = page as string;
-            next();
         });
 
 

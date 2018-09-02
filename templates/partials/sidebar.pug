@@ -1,13 +1,15 @@
 mixin sidebar-item(item, depth=0)
+    - const open = data.url.startsWith(item.path)
     - const active = data.url === item.path
 
+    - const topLink = data.headings ? data.headings[0].slug : '';
     li
         if (active)
-            a.active(class=`depth-${depth}` href=`#${data.headings[0].slug}`)= item.title
+            a.active(class=`depth-${depth}` href=`#${topLink}`)= item.title
         else
             a(href=item.path class=`depth-${depth} color-grey-300`)= item.title
 
-        if (item.children)
+        if (item.children && open)
             ul
                 for child in item.children
                     +sidebar-item(child, depth + 1)
