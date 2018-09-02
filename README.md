@@ -24,7 +24,7 @@ In your `.origami` file, add this to your `plugins`:
 ## Options:
 
 | Option | Type | Default | Description |
-|-|-|-|-|-|
+|-|-|-|-|
 | `directory` | `string` | `'docs'` | Directory for the markdown files to read |
 | `prefix` | `string` | `'/docs'` | URL prefix for serving the documentation |
 | `themeTemplate` |  `string`, `false` | `false` | Pass the response data to [origami-app-theme](https://github.com/origami-cms/app-theme) to render  |
