@@ -6,6 +6,7 @@ header {
     width: 100%;
     height: var(--size-large);
     line-height: var(--size-large);
+    z-index: 99;
 
     svg.i {
         margin-left: var(--size-small);

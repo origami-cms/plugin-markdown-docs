@@ -194,7 +194,7 @@ form input.hollow[type="submit"], form zen-ui-button.hollow, zen-ui-button.hollo
 
 form input, form select, form textarea, form input[type="file"] + span.input {
   display: inline-block;
-  color: var(--color-text, var(--color-grey-900, #443750));
+  color: var(--color-text, var(--color-grey-600, #705a83));
   background-color: var(--input-bg, transparent);
   height: var(--input-height, var(--size-large, 6rem));
   line-height: var(--input-height, var(--size-large, 6rem));
@@ -389,7 +389,7 @@ form {
   --color-active: var(--color-blue, #23a8e6);
   --color-active-soft: rgba(35, 168, 230, 0.05);
   --color-main-softest: #f8f8ff;
-  --color-text: var(--color-grey-900, #443750);
+  --color-text: var(--color-grey-600, #705a83);
   --color-bg: #f8f8ff;
   --color-hover: var(--color-grey-50, #f8f8ff);
   --color-yellow-light: #fef7e8;
@@ -588,6 +588,12 @@ a, wc-link {
   text-decoration: none;
   cursor: pointer;
   color: var(--color-main); }
+
+p {
+  line-height: 2;
+  margin-bottom: var(--size-small); }
+  p:last-child {
+    margin-bottom: 0; }
 
 small {
   font-size: var(--fs-small); }
@@ -3653,7 +3659,8 @@ header {
   left: 0;
   width: 100%;
   height: var(--size-large);
-  line-height: var(--size-large); }
+  line-height: var(--size-large);
+  z-index: 99; }
   header svg.i {
     margin-left: var(--size-small); }
 
@@ -3747,6 +3754,7 @@ aside.card {
     display: inline-block; } }
 
 article {
+  position: relative;
   padding: var(--size-small) var(--size-main);
   margin-bottom: var(--size-large);
   max-width: 80rem; }
@@ -3795,6 +3803,8 @@ article {
         box-shadow: 0 0.1rem 0.2rem var(--color-grey-200);
         margin-left: calc(var(--size-small) * -1);
         margin-right: calc(var(--size-tiny) * 1); }
+  article img {
+    max-width: 100%; }
   article a.made-by {
     display: block;
     margin-top: var(--size-large);
@@ -3831,7 +3841,6 @@ pre {
   --h1-font-size: var(--font-size-huge);
   --h2-font-size: var(--font-size-large);
   --h2-color: var(--color-blue);
-  --color-text: var(--color-grey-600);
   --hr-color: var(--color-grey-200);
   --font-family-mono: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
   --prism-bg: var(--color-black);
