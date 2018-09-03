@@ -5,12 +5,16 @@ html(lang="en")
 
 
         title= data.title
+        script(src="https://unpkg.com/@webcomponents/webcomponentsjs@2.0.0/webcomponents-loader.js")
+
 
         link(rel="stylesheet", href=data.css)
         link(rel="stylesheet", href="/docs/prism.css")
 
         include partials/colorStyles
     body
+        <zen-icon-set></zen-icon-set>
+
         header
 
         include partials/header
@@ -23,5 +27,8 @@ html(lang="en")
         footer
 
 
+        script(src="/docs/zen/IconSet.js")
+        script(src="/docs/zen/Icon.js")
         script(src="/docs/scroller.js")
+        script(src="/docs/code-collapser.js")
         script(src="/docs/prism.js")

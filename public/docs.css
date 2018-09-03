@@ -1,5 +1,10 @@
 @import url("https://fonts.googleapis.com/css?family=Work+Sans:300,400,600");
-article code, pre {
+pre[class*="language-"] .code-collapser {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%); }
+
+article code, pre[class*="language-"] {
   border-radius: var(--border-radius); }
 
 aside.card li span, aside.card li a {
@@ -3661,7 +3666,7 @@ header {
   height: var(--size-large);
   line-height: var(--size-large);
   z-index: 99; }
-  header svg.i {
+  header zen-icon {
     margin-left: var(--size-small); }
 
 @media only screen and (min-width: 560px) {
@@ -3833,9 +3838,49 @@ article {
     padding: var(--size-main) var(--size-huge);
     margin-left: calc(var(--sidebar-width) + var(--size-main)); } }
 
-pre {
+pre:not([class*="language-"]) {
+  height: 3rem;
+  background-color: var(--color-grey-800); }
+
+pre[class*="language-"] {
+  position: relative;
   background-color: var(--color-grey-800);
-  box-shadow: 0 0.5rem 2rem var(--color-grey-300); }
+  box-shadow: 0 0.5rem 2rem var(--color-grey-300);
+  height: auto;
+  max-height: 30rem; }
+  pre[class*="language-"].collapse {
+    height: 30rem;
+    overflow-y: hidden; }
+  pre[class*="language-"] .code-collapser {
+    display: inline-block;
+    bottom: var(--size-small);
+    background: white;
+    height: var(--size-large);
+    line-height: var(--size-large);
+    color: var(--color-main);
+    border-radius: var(--size-medium);
+    padding: 0 var(--size-medium);
+    font-family: var(--font-family);
+    animation: fade-in 0.5s;
+    transition: all var(--transition-time);
+    cursor: pointer; }
+    pre[class*="language-"] .code-collapser:before {
+      content: 'Show more'; }
+    pre[class*="language-"] .code-collapser zen-icon {
+      margin-left: var(--size-tiny);
+      transition: all var(--transition-time); }
+  pre[class*="language-"].open {
+    max-height: none;
+    height: auto;
+    overflow: auto; }
+    pre[class*="language-"].open .code-collapser {
+      opacity: 0.3; }
+      pre[class*="language-"].open .code-collapser:hover {
+        opacity: 1; }
+      pre[class*="language-"].open .code-collapser:before {
+        content: 'Show less'; }
+      pre[class*="language-"].open .code-collapser zen-icon {
+        transform: rotate(180deg); }
 
 :root {
   --h1-font-size: var(--font-size-huge);

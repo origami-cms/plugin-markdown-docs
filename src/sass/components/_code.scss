@@ -1,5 +1,60 @@
-pre {
+pre:not([class*="language-"]) {
+    height: 3rem;
+    background-color: var(--color-grey-800);
+}
+pre[class*="language-"] {
+    position: relative;
     @extend %rounded;
     background-color: var(--color-grey-800);
     box-shadow: 0 0.5rem 2rem var(--color-grey-300);
+    height: auto;
+    max-height: 30rem;
+
+    &.collapse {
+        height: 30rem;
+        overflow-y: hidden;
+    }
+
+    .code-collapser {
+        display: inline-block;
+        @extend %center-h;
+        bottom: var(--size-small);
+        background: white;
+        height: var(--size-large);
+        line-height: var(--size-large);
+        color: var(--color-main);
+        border-radius: var(--size-medium);
+        padding: 0 var(--size-medium);
+        font-family: var(--font-family);
+        animation: fade-in 0.5s;
+        transition: all var(--transition-time);
+        cursor: pointer;
+
+        &:before {
+            content: 'Show more';
+        }
+        zen-icon {
+            margin-left: var(--size-tiny);
+            transition: all var(--transition-time);
+        }
+    }
+
+    &.open {
+        max-height: none;
+        height: auto;
+        overflow: auto;
+
+        .code-collapser {
+            opacity: 0.3;
+            &:hover {
+                opacity: 1;
+            }
+            &:before {
+                content: 'Show less'
+            }
+            zen-icon {
+                transform: rotate(180deg);
+            }
+        }
+    }
 }

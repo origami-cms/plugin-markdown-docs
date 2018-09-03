@@ -26,8 +26,7 @@ aside.card
         span.title.align-middle= data.siteTitle
 
     button.hollow.float-right.margin-small
-        svg.i.grey-300(onclick="document.querySelector('aside').classList.toggle('active')")
-            use(xlink:href="/docs/icons.svg#zen-icon-cross")
+        zen-icon(color="grey-300" type="cross" onclick="document.querySelector('aside').classList.toggle('active')")
 
     ul
         //- Don't show the root tree node (results in many 1st level items)
