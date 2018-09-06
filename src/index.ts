@@ -1,17 +1,26 @@
 import fs from 'fs';
-import marked from 'marked';
+import { startCase } from 'lodash';
+import MarkdownIt from 'markdown-it';
+// @ts-ignore
+import markdownItAttrs from 'markdown-it-attrs';
+// @ts-ignore
+import markdownItContainer from 'markdown-it-container';
+// @ts-ignore
+import markdownItNamedHeaders from 'markdown-it-named-headers';
+// @ts-ignore
+import toc from 'markdown-toc';
 import { Renderer, Route } from 'origami-core-lib';
 import Server from 'origami-core-server';
 import path from 'path';
+import { parse } from 'url';
 import { promisify } from 'util';
 import { directoryTree, lookupFile } from './lib';
-// @ts-ignore
-import toc from 'markdown-toc';
-import {parse} from 'url';
-import {startCase} from 'lodash';
 
-const markdown = promisify(marked);
 const fsRead = promisify(fs.readFile);
+const markdown = new MarkdownIt();
+markdown.use(markdownItAttrs);
+markdown.use(markdownItNamedHeaders);
+// markdown.use(markdownItContainer, );
 
 export interface MarkdownDocsSettings {
     directory: string;
@@ -83,7 +92,7 @@ module.exports = (app: Server, options = {}) => {
             if (file) {
                 const md = (await fsRead(file)).toString();
                 // @ts-ignore
-                const body = await markdown(md);
+                const body = await markdown.render(md);
 
                 let headings: object[] | false = toc(md).json;
                 const originalTitle = startCase(file.split('/').pop().slice(0, -3));

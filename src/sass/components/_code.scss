@@ -58,3 +58,30 @@ pre[class*="language-"] {
         }
     }
 }
+
+code[class*="language-"][data-filename] {
+    margin-top: var(--size-main);
+    display: block;
+    &:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: var(--size-small);
+        line-height: var(--size-small);
+        background: rgba(255,255,255,0.05);
+        border-top-left-radius: var(--border-radius);
+        border-top-right-radius: var(--border-radius);
+        right: 0;
+        padding: var(--size-tiny);
+        content: attr(data-filename);
+        color: var(--color-grey-500);
+    }
+}
+
+pre.line-numbers {
+    code[class*="language-"][data-filename]:before {
+        top: -5.4rem;
+        left: -5.4rem;
+        right: -1.4rem;
+    }
+}

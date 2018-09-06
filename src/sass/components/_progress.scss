@@ -1,0 +1,17 @@
+canvas#progress {
+    position: fixed;
+    top: var(--size-tiny);
+    right: var(--size-tiny);
+    width: 4rem;
+    height: 4rem;
+    transform: rotate(-90deg);
+    z-index: 100;
+}
+
+
+@media #{$mq-huge-up} {
+    canvas#progress {
+        top: var(--size-main);
+        right: var(--size-large);
+    }
+}

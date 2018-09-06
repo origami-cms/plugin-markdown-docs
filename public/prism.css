@@ -137,12 +137,12 @@ pre[class*="language-"].line-numbers > code {
 .line-numbers .line-numbers-rows {
 	position: absolute;
 	pointer-events: none;
-	top: 0;
+	top: 4px;
 	font-size: 100%;
 	left: -3.8em;
 	width: 3em; /* works for line-numbers below 1000 lines */
 	letter-spacing: -1px;
-	border-right: 1px solid var(--prism-line-numbers);
+	border-right: 2px solid var(--prism-line-numbers);
 
 	-webkit-user-select: none;
 	-moz-user-select: none;

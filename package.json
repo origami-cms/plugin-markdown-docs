@@ -14,6 +14,7 @@
     "watch": "yarn build:ts -w & yarn build:sass -w"
   },
   "devDependencies": {
+    "@types/markdown-it": "^0.0.5",
     "node-sass": "^4.9.3",
     "origami-icons": "^0.0.14",
     "tslint": "^5.11.0",
@@ -25,8 +26,11 @@
     "@types/marked": "^0.4.1",
     "directory-tree": "^2.1.0",
     "lodash": "^4.17.10",
+    "markdown-it": "^8.4.2",
+    "markdown-it-attrs": "^2.3.1",
+    "markdown-it-container": "^2.0.0",
+    "markdown-it-named-headers": "^0.0.4",
     "markdown-toc": "^1.2.0",
-    "marked": "^0.5.0",
     "origami-core-lib": "^0.3.13-alpha.2",
     "origami-core-server": "^0.5.3-alpha.0"
   }
