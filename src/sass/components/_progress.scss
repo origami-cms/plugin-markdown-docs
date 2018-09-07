@@ -1,17 +1,64 @@
-canvas#progress {
+#progress {
     position: fixed;
-    top: var(--size-tiny);
-    right: var(--size-tiny);
     width: 4rem;
     height: 4rem;
-    transform: rotate(-90deg);
+    top: var(--size-tiny);
+    right: var(--size-tiny);
     z-index: 100;
+    transform: scale(0.75);
+
+
+    canvas {
+        width: 4rem;
+        height: 4rem;
+        transform: rotate(-90deg);
+    }
+    zen-icon {
+        position: absolute;
+        left: 0;
+        top: 0;
+        display: none;
+    }
+
+    &.complete {
+        background: var(--color-main);
+        border-radius: 50%;
+        animation: bounceIn 0.5s;
+
+        canvas {
+            display: none;
+        }
+
+        zen-icon {
+            display: inline-block;
+        }
+    }
+}
+
+@keyframes bounceIn{
+  0%{
+    opacity: 0;
+    transform: scale(0.3) translate3d(0,0,0);
+  }
+  50%{
+    opacity: 0.9;
+    transform: scale(1.1);
+  }
+  80%{
+    opacity: 1;
+    transform: scale(0.89);
+  }
+  100%{
+    opacity: 1;
+    transform: scale(1) translate3d(0,0,0);
+  }
 }
 
 
 @media #{$mq-huge-up} {
-    canvas#progress {
+    #progress {
         top: var(--size-main);
         right: var(--size-large);
+        transform: none;
     }
 }

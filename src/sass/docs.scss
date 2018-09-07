@@ -6,7 +6,10 @@ $mq-sidebar: "#{$mq-screen} and (min-width: 560px)";
 :root {
     --h1-font-size: var(--font-size-huge);
     --h2-font-size: var(--font-size-large);
+    --h3-font-size: 1.8rem;
+    --h3-font-weight: 600;
     --h2-color: var(--color-blue);
+    --h3-color: var(--color-blue);
     --hr-color: var(--color-grey-200);
     --font-family-mono: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
 

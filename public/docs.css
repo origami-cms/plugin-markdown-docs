@@ -3772,6 +3772,9 @@ article {
   article h2 {
     margin-top: var(--size-huge);
     margin-bottom: var(--size-small); }
+  article h3 {
+    margin-top: var(--size-large);
+    margin-bottom: var(--size-small); }
   article strong {
     letter-spacing: 0; }
   article p {
@@ -3792,7 +3795,11 @@ article {
     background: var(--color-active-soft);
     margin-left: calc(var(--size-small) * -1);
     margin-right: calc(var(--size-small) * -1);
-    box-shadow: none; }
+    box-shadow: none;
+    margin-top: var(--size-large); }
+    article blockquote h2 {
+      margin-top: 0;
+      margin-left: calc(var(--size-small) * -1); }
   article ul {
     padding-left: var(--size-small); }
     article ul li {
@@ -3909,24 +3916,59 @@ pre.line-numbers code[class*="language-"][data-filename]:before {
   left: -5.4rem;
   right: -1.4rem; }
 
-canvas#progress {
+#progress {
   position: fixed;
-  top: var(--size-tiny);
-  right: var(--size-tiny);
   width: 4rem;
   height: 4rem;
-  transform: rotate(-90deg);
-  z-index: 100; }
+  top: var(--size-tiny);
+  right: var(--size-tiny);
+  z-index: 100;
+  transform: scale(0.75); }
+  #progress canvas {
+    width: 4rem;
+    height: 4rem;
+    transform: rotate(-90deg); }
+  #progress zen-icon {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: none; }
+  #progress.complete {
+    background: var(--color-main);
+    border-radius: 50%;
+    animation: bounceIn 0.5s; }
+    #progress.complete canvas {
+      display: none; }
+    #progress.complete zen-icon {
+      display: inline-block; }
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) translate3d(0, 0, 0); }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.1); }
+  80% {
+    opacity: 1;
+    transform: scale(0.89); }
+  100% {
+    opacity: 1;
+    transform: scale(1) translate3d(0, 0, 0); } }
 
 @media only screen and (min-width: 1025px) {
-  canvas#progress {
+  #progress {
     top: var(--size-main);
-    right: var(--size-large); } }
+    right: var(--size-large);
+    transform: none; } }
 
 :root {
   --h1-font-size: var(--font-size-huge);
   --h2-font-size: var(--font-size-large);
+  --h3-font-size: 1.8rem;
+  --h3-font-weight: 600;
   --h2-color: var(--color-blue);
+  --h3-color: var(--color-blue);
   --hr-color: var(--color-grey-200);
   --font-family-mono: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
   --prism-bg: var(--color-black);
