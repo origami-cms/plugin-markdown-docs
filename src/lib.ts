@@ -45,7 +45,7 @@ export const directoryTree = (base: string, prefix = '') => {
     const rel = (c: any) => {
         c.path = `${prefix}/${path.relative(base, c.path)}`.replace('.md', '');
         c.title = startCase(c.name);
-        delete c.name;
+        // delete c.name;
         delete c.size;
         return c;
     };
@@ -69,4 +69,16 @@ export const directoryTree = (base: string, prefix = '') => {
     };
     map(tree);
     return tree;
+};
+
+
+export const getNodeFromTree = (path: string, tree: any) => {
+    const p = path.split('/');
+
+    let cur: string | undefined;
+    let nextPage = tree;
+    while ((cur = p.shift()) && nextPage && nextPage.children) {
+        nextPage = nextPage.children.find((c: any) => c.name === cur);
+    }
+    return nextPage || false;
 };

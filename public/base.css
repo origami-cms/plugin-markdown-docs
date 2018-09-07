@@ -1,4 +1,9 @@
 @import url("https://fonts.googleapis.com/css?family=Work+Sans:300,400,600");
+.ellipsis {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden; }
+
 form input[type="submit"], form zen-ui-button, zen-ui-button, button, .button, input[type='submit'] {
   display: inline-block;
   width: auto;
@@ -123,6 +128,8 @@ form input.hollow[type="submit"], form zen-ui-button.hollow, zen-ui-button.hollo
     color: var(--color-main); }
   form input.hollow[color=alt][type="submit"], zen-ui-button.hollow[color=alt], button.hollow[color=alt], .hollow.button[color=alt], input.hollow[color=alt][type='submit'], form input[color=alt][hollow][type="submit"], zen-ui-button[color=alt][hollow], button[color=alt][hollow], .button[color=alt][hollow], input[color=alt][hollow][type='submit'] {
     color: var(--color-alt); }
+  form input.hollow[color=active][type="submit"], zen-ui-button.hollow[color=active], button.hollow[color=active], .hollow.button[color=active], input.hollow[color=active][type='submit'], form input[color=active][hollow][type="submit"], zen-ui-button[color=active][hollow], button[color=active][hollow], .button[color=active][hollow], input[color=active][hollow][type='submit'] {
+    color: var(--color-active); }
   form input.hollow[color=text][type="submit"], zen-ui-button.hollow[color=text], button.hollow[color=text], .hollow.button[color=text], input.hollow[color=text][type='submit'], form input[color=text][hollow][type="submit"], zen-ui-button[color=text][hollow], button[color=text][hollow], .button[color=text][hollow], input[color=text][hollow][type='submit'] {
     color: var(--color-text); }
   form input.hollow[color=white][type="submit"], zen-ui-button.hollow[color=white], button.hollow[color=white], .hollow.button[color=white], input.hollow[color=white][type='submit'], form input[color=white][hollow][type="submit"], zen-ui-button[color=white][hollow], button[color=white][hollow], .button[color=white][hollow], input[color=white][hollow][type='submit'] {
@@ -644,6 +651,10 @@ h3 {
     fill: var(--color-alt); }
   .i.alt path {
     stroke: var(--color-alt); }
+  .i.active use {
+    fill: var(--color-active); }
+  .i.active path {
+    stroke: var(--color-active); }
   .i.text use {
     fill: var(--color-text); }
   .i.text path {
@@ -2439,6 +2450,14 @@ nav.navbar {
       font-weight: 400;
       text-transform: none; }
 
+.card.hover {
+  background-color: transparent;
+  box-shadow: none;
+  transition: all var(--transition-time); }
+  .card.hover:hover {
+    background-color: var(--card-bg);
+    box-shadow: var(--card-shadow); }
+
 header.page-header {
   display: flex; }
   header.page-header h1, header.page-header h2 {
@@ -2474,6 +2493,12 @@ hr {
 
 .background-alt {
   background-color: var(--color-alt); }
+
+.color-active {
+  color: var(--color-active); }
+
+.background-active {
+  background-color: var(--color-active); }
 
 .color-text {
   color: var(--color-text); }

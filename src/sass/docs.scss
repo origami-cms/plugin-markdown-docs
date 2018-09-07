@@ -20,11 +20,11 @@ $mq-sidebar: "#{$mq-screen} and (min-width: 560px)";
     --prism-comment: var(--color-grey-600);
     --prism-tag: var(--color-blue);
     --prism-function-name: #6196cc;
-    --prism-number-boolean-func: var(--color-orange);
+    --prism-number-boolean-func: var(--color-blue);
     --prism-property-class-symbol: var(--color-yellow);
     --prism-keyword: var(--color-grey-400);
     --prism-string-variable: var(--color-green);
-    --prism-operator: var(--color-blue);
+    --prism-operator: var(--color-orange);
     --prism-line-numbers: var(--color-grey-600);
 
     --prism-line-height: 1.8;

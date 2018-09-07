@@ -4,11 +4,11 @@ pre[class*="language-"] .code-collapser {
   left: 50%;
   transform: translateX(-50%); }
 
-article code, article > img,
+article code, article blockquote, article > img,
 article > p > img, pre[class*="language-"] {
   border-radius: var(--border-radius); }
 
-aside.card li span, aside.card li a {
+.ellipsis, aside.card li span, aside.card li a {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden; }
@@ -137,6 +137,8 @@ form input.hollow[type="submit"], form zen-ui-button.hollow, zen-ui-button.hollo
     color: var(--color-main); }
   form input.hollow[color=alt][type="submit"], zen-ui-button.hollow[color=alt], button.hollow[color=alt], .hollow.button[color=alt], input.hollow[color=alt][type='submit'], form input[color=alt][hollow][type="submit"], zen-ui-button[color=alt][hollow], button[color=alt][hollow], .button[color=alt][hollow], input[color=alt][hollow][type='submit'] {
     color: var(--color-alt); }
+  form input.hollow[color=active][type="submit"], zen-ui-button.hollow[color=active], button.hollow[color=active], .hollow.button[color=active], input.hollow[color=active][type='submit'], form input[color=active][hollow][type="submit"], zen-ui-button[color=active][hollow], button[color=active][hollow], .button[color=active][hollow], input[color=active][hollow][type='submit'] {
+    color: var(--color-active); }
   form input.hollow[color=text][type="submit"], zen-ui-button.hollow[color=text], button.hollow[color=text], .hollow.button[color=text], input.hollow[color=text][type='submit'], form input[color=text][hollow][type="submit"], zen-ui-button[color=text][hollow], button[color=text][hollow], .button[color=text][hollow], input[color=text][hollow][type='submit'] {
     color: var(--color-text); }
   form input.hollow[color=white][type="submit"], zen-ui-button.hollow[color=white], button.hollow[color=white], .hollow.button[color=white], input.hollow[color=white][type='submit'], form input[color=white][hollow][type="submit"], zen-ui-button[color=white][hollow], button[color=white][hollow], .button[color=white][hollow], input[color=white][hollow][type='submit'] {
@@ -336,7 +338,7 @@ form {
   form.input-small input, form.input-small select, form.input-small textarea {
     height: var(--input-height-small); }
 
-.card, header, article blockquote {
+.card, header {
   background: var(--card-bg, var(--color-white, white));
   border: var(--card-border, );
   border-radius: var(--card-border-radius, var(--border-radius, 0.4rem));
@@ -658,6 +660,10 @@ h3 {
     fill: var(--color-alt); }
   .i.alt path {
     stroke: var(--color-alt); }
+  .i.active use {
+    fill: var(--color-active); }
+  .i.active path {
+    stroke: var(--color-active); }
   .i.text use {
     fill: var(--color-text); }
   .i.text path {
@@ -2453,6 +2459,14 @@ nav.navbar {
       font-weight: 400;
       text-transform: none; }
 
+.card.hover {
+  background-color: transparent;
+  box-shadow: none;
+  transition: all var(--transition-time); }
+  .card.hover:hover {
+    background-color: var(--card-bg);
+    box-shadow: var(--card-shadow); }
+
 header.page-header {
   display: flex; }
   header.page-header h1, header.page-header h2 {
@@ -2488,6 +2502,12 @@ hr {
 
 .background-alt {
   background-color: var(--color-alt); }
+
+.color-active {
+  color: var(--color-active); }
+
+.background-active {
+  background-color: var(--color-active); }
 
 .color-text {
   color: var(--color-text); }
@@ -3762,7 +3782,6 @@ aside.card {
 article {
   position: relative;
   padding: var(--size-small) var(--size-main);
-  margin-bottom: var(--size-super);
   max-width: 80rem; }
   article a {
     color: var(--color-alt);
@@ -3775,6 +3794,13 @@ article {
   article h3 {
     margin-top: var(--size-large);
     margin-bottom: var(--size-small); }
+  article h4 {
+    text-transform: uppercase; }
+  article h1 + .subtitle {
+    margin-top: calc(var(--size-main) * -1);
+    color: var(--color-grey-500);
+    margin-bottom: var(--size-large);
+    font-size: var(--h2-font-size); }
   article strong {
     letter-spacing: 0; }
   article p {
@@ -3791,6 +3817,7 @@ article {
     color: var(--prism-text);
     font-size: var(--font-size-small); }
   article blockquote {
+    padding: var(--size-small) var(--size-main);
     border: 1px solid var(--color-active);
     background: var(--color-active-soft);
     margin-left: calc(var(--size-small) * -1);
@@ -3962,6 +3989,41 @@ pre.line-numbers code[class*="language-"][data-filename]:before {
     right: var(--size-large);
     transform: none; } }
 
+div.page-links {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: var(--size-main);
+  margin-top: var(--size-super);
+  border: var(--border-200);
+  border-width: 0.1rem 0;
+  padding: var(--size-small) 0; }
+  div.page-links .page-prev {
+    grid-area: 1; }
+  div.page-links .page-next {
+    grid-column: 2; }
+  div.page-links a {
+    text-decoration: none;
+    color: var(--color-active);
+    padding: var(--size-small) var(--card-padding); }
+    div.page-links a h4 {
+      color: var(--color-active);
+      opacity: 0.5;
+      margin-bottom: 1rem;
+      font-size: var(--font-size-small); }
+    div.page-links a zen-icon {
+      transition: all var(--transition-time); }
+    div.page-links a.page-prev h4 {
+      transform: translateX(calc(var(--size-tiny) * -1)); }
+    div.page-links a.page-prev:hover zen-icon {
+      transform: translateX(-25%); }
+    div.page-links a.page-next h4 {
+      transform: translateX(var(--size-tiny)); }
+    div.page-links a.page-next:hover zen-icon {
+      transform: translateX(25%); }
+
+div.page-links + a.made-by {
+  margin-top: var(--size-medium); }
+
 :root {
   --h1-font-size: var(--font-size-huge);
   --h2-font-size: var(--font-size-large);
@@ -3977,11 +4039,11 @@ pre.line-numbers code[class*="language-"][data-filename]:before {
   --prism-comment: var(--color-grey-600);
   --prism-tag: var(--color-blue);
   --prism-function-name: #6196cc;
-  --prism-number-boolean-func: var(--color-orange);
+  --prism-number-boolean-func: var(--color-blue);
   --prism-property-class-symbol: var(--color-yellow);
   --prism-keyword: var(--color-grey-400);
   --prism-string-variable: var(--color-green);
-  --prism-operator: var(--color-blue);
+  --prism-operator: var(--color-orange);
   --prism-line-numbers: var(--color-grey-600);
   --prism-line-height: 1.8;
   --prism-font-size: var(--font-size-small); }

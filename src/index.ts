@@ -8,19 +8,18 @@ import markdownItContainer from 'markdown-it-container';
 // @ts-ignore
 import markdownItNamedHeaders from 'markdown-it-named-headers';
 // @ts-ignore
+import markdownFrontMatter from 'markdown-it-front-matter';
+// @ts-ignore
 import toc from 'markdown-toc';
-import { Renderer, Route } from 'origami-core-lib';
+
+import { Renderer, Route, warn } from 'origami-core-lib';
 import Server from 'origami-core-server';
 import path from 'path';
 import { parse } from 'url';
 import { promisify } from 'util';
-import { directoryTree, lookupFile } from './lib';
+import { directoryTree, lookupFile, getNodeFromTree } from './lib';
 
 const fsRead = promisify(fs.readFile);
-const markdown = new MarkdownIt();
-markdown.use(markdownItAttrs);
-markdown.use(markdownItNamedHeaders);
-// markdown.use(markdownItContainer, );
 
 export interface MarkdownDocsSettings {
     directory: string;
@@ -33,6 +32,12 @@ export interface MarkdownDocsSettings {
     siteTitle?: string;
     cache?: boolean;
     colors?: {[color: string]: string};
+}
+
+export interface FrontMatterData {
+    title?: string;
+    prev?: string;
+    next?: string;
 }
 
 let settings: MarkdownDocsSettings;
@@ -90,13 +95,36 @@ module.exports = (app: Server, options = {}) => {
 
 
             if (file) {
+                let fmData: FrontMatterData = {};
+
+                const markdown = new MarkdownIt();
+                markdown.use(markdownItAttrs);
+                markdown.use(markdownItNamedHeaders);
+                markdown.use(markdownFrontMatter, (fm: any) => {
+                    try {
+                        fmData = JSON.parse(fm);
+
+                    } catch (e) {
+                        warn('MarkdownDocs', `Document ${file} has an invalid JSON header`);
+                    }
+                });
+                markdown.use(markdownItContainer, 'subtitle');
+
+
                 const md = (await fsRead(file)).toString();
                 // @ts-ignore
                 const body = await markdown.render(md);
 
+
                 let headings: object[] | false = toc(md).json;
                 const originalTitle = startCase(file.split('/').pop().slice(0, -3));
                 if (!(headings as object[]).length) headings = false;
+
+                let prevPage;
+                let nextPage;
+                if (typeof fmData.prev === 'string') prevPage = getNodeFromTree(fmData.prev, tree);
+                if (typeof fmData.next === 'string') nextPage = getNodeFromTree(fmData.next, tree);
+
 
                 res.data = {
                     title: (headings && headings[0])
@@ -111,8 +139,14 @@ module.exports = (app: Server, options = {}) => {
                     siteTitle: settings.siteTitle,
                     sidebarSkipRoot: settings.sidebarSkipRoot,
                     logo: settings.logo,
-                    colors: settings.colors
+                    colors: settings.colors,
+                    prevPage,
+                    nextPage,
+
+                    // Extend with data from front matter header
+                    ...fmData
                 } as {[key: string]: any};
+
 
                 // Used for origami-app-theme
                 if (settings.themeTemplate) {
