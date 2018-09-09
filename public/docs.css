@@ -3828,23 +3828,25 @@ article {
     article blockquote h2 {
       margin-top: 0;
       margin-left: calc(var(--size-small) * -1); }
-  article ul {
+  article ul, article ol {
     padding-left: var(--size-small); }
-    article ul li {
+    article ul li, article ol li {
       display: list-item;
       line-height: 2; }
-      article ul li:before {
-        content: '';
-        display: inline-block;
-        width: calc(var(--size-tiny) / 2);
-        height: calc(var(--size-tiny) / 2);
-        border-radius: 50%;
-        background: white;
-        border: 2px solid var(--color-grey-300);
-        box-shadow: 0 0.1rem 0.2rem var(--color-grey-200);
-        margin-left: calc(var(--size-small) * -1);
-        margin-right: calc(var(--size-tiny) * 1); }
-  article p + ul {
+  article ul li:before {
+    content: '';
+    display: inline-block;
+    width: calc(var(--size-tiny) / 2);
+    height: calc(var(--size-tiny) / 2);
+    border-radius: 50%;
+    background: white;
+    border: 2px solid var(--color-grey-300);
+    box-shadow: 0 0.1rem 0.2rem var(--color-grey-200);
+    margin-left: calc(var(--size-small) * -1);
+    margin-right: calc(var(--size-tiny) * 1); }
+  article ol li {
+    list-style: decimal; }
+  article p + ul, article p + ol {
     transform: translateY(calc(var(--size-tiny) * -1)); }
   article > img,
   article > p > img {
