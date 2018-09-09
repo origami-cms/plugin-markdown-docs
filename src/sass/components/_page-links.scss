@@ -3,7 +3,7 @@ div.page-links {
     grid-template-columns: 1fr 1fr;
     grid-gap: var(--size-main);
     margin-top: var(--size-super);
-    border: var(--border-200);
+    border: var(--border-100);
     border-width: 0.1rem 0;
     padding: var(--size-small) 0;
 
@@ -18,12 +18,6 @@ div.page-links {
         text-decoration: none;
         color: var(--color-active);
         padding: var(--size-small) var(--card-padding);
-        // box-shadow: none;
-        // transition: all var(--transition-time);
-
-        // &:hover {
-        //     box-shadow: var(--card-shadow);
-        // }
 
         h4 {
             color: var(--color-active);

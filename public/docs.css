@@ -3782,7 +3782,8 @@ aside.card {
 article {
   position: relative;
   padding: var(--size-small) var(--size-main);
-  max-width: 80rem; }
+  max-width: 80rem;
+  background: var(--color-white); }
   article a {
     color: var(--color-alt);
     text-decoration: underline; }
@@ -3994,7 +3995,7 @@ div.page-links {
   grid-template-columns: 1fr 1fr;
   grid-gap: var(--size-main);
   margin-top: var(--size-super);
-  border: var(--border-200);
+  border: var(--border-100);
   border-width: 0.1rem 0;
   padding: var(--size-small) 0; }
   div.page-links .page-prev {
