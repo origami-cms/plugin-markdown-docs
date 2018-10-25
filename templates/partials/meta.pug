@@ -3,7 +3,7 @@ meta(name="viewport", content="width=device-width, initial-scale=1.0, viewport-f
 meta(http-equiv="X-UA-Compatible" content="IE=Edge")
 meta(property="og:type" content="website")
 
-- const metaDescription = /.*<p>(.*)<\/p>.*/.exec(data.body);
+- const metaDescription = data.metaDescription || /.*<p>(.*)<\/p>.*/.exec(data.body);
 - const firstP = metaDescription ? metaDescription[1] : false;
 if (firstP)
     meta(name="description" content=metaDescription)
