@@ -1,11 +1,9 @@
 import {Origami} from 'origami-core-lib';
-import {parse} from 'url';
+import {DocTree} from '../lib/DocTree';
 
-export const CACHE: { [url: string]: string | false } = {};
-
-export default (): Origami.Server.RequestHandler => (req, res, next) => {
+export default (tree: DocTree): Origami.Server.RequestHandler => (req, res, next) => {
     if (req.query.nocache !== undefined) {
-        CACHE[parse(req.originalUrl).pathname!] = false;
+        tree.clearCache();
     }
     next();
 };

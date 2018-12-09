@@ -1,9 +1,11 @@
 import {Route} from 'origami-core-lib';
 import Server from 'origami-core-server';
 import path from 'path';
+import {DocTree} from './lib/DocTree';
 import mwCache from './middleware/cache';
 import getData from './middleware/getData';
 import render from './middleware/render';
+import search from './middleware/search';
 
 export interface MarkdownDocsSettings {
     directory: string;
@@ -29,13 +31,13 @@ const DEFAULT_OPTIONS: MarkdownDocsSettings = {
     siteTitle: 'Documentation',
     cache: true
 };
-
-
 const DEFAULT_CSS_HREF = '/docs/docs.css';
 
 
 module.exports = (app: Server, options = {}) => {
     settings = {...DEFAULT_OPTIONS, ...options};
+
+    const tree = new DocTree(settings.directory, settings.prefix);
 
     // Statically host the public directory
     app.static(path.resolve(__dirname, '../public'), settings.prefix);
@@ -44,14 +46,14 @@ module.exports = (app: Server, options = {}) => {
     const r = new Route(`${settings.prefix}/*`)
         // If the /xyz?nocache query string is present, clear the cache for that URL
         .position('pre-store')
-        .get(mwCache())
+        .get(mwCache(tree))
 
         // Attempts to lookup an article in the docs folder, and stores to the response
         .position('store')
-        .get(getData(settings))
+        .get(getData(settings, tree))
 
         // If there is an article in the response.data, render it or pass off to origami-app-theme
-        .position('render').get(render(settings));
+        .position('render').get(render(settings, tree));
 
 
     // If there's a path to a custom css file given, host it statically
@@ -62,6 +64,9 @@ module.exports = (app: Server, options = {}) => {
         app.useRouter(cssRoute);
     }
 
+    const searchRoute = new Route('/api/v1/docs/search')
+        .get(search(settings, tree));
 
     app.useRouter(r);
+    app.useRouter(searchRoute);
 };

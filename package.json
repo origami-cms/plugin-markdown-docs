@@ -16,6 +16,7 @@
   "devDependencies": {
     "@commitlint/config-conventional": "^7.1.2",
     "@types/lodash": "^4.14.117",
+    "@types/lunr": "^2.1.6",
     "@types/markdown-it": "^0.0.5",
     "commitlint": "^7.2.1",
     "husky": "^1.1.2",
@@ -30,6 +31,7 @@
     "@types/marked": "^0.4.1",
     "directory-tree": "^2.1.0",
     "lodash": "^4.17.10",
+    "lunr": "^2.3.4",
     "markdown-it": "^8.4.2",
     "markdown-it-attrs": "^2.3.1",
     "markdown-it-container": "^2.0.0",
