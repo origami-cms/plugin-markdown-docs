@@ -1,7 +1,7 @@
 if (data.colors)
-    -
-        const colorRules = Object.entries(data.colors)
-            .map(([color, value]) => `--color-${color}: ${value};`)
-            .join('')
+  -
+    const colorRules = Object.entries(data.colors)
+      .map(([color, value]) => `--color-${color}: ${value};`)
+      .join('')
 
-    style.color-overrides= `:root{${colorRules}}`
+  style.color-overrides= `:root{${colorRules}}`

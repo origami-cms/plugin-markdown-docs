@@ -1,20 +1,20 @@
 header {
-    @extend %comp-card;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: var(--size-large);
-    line-height: var(--size-large);
-    z-index: 99;
+  @extend %comp-card;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--size-large);
+  line-height: var(--size-large);
+  z-index: 99;
 
-    zen-icon {
-        margin-left: var(--size-small);
-    }
+  zen-icon {
+    margin-left: var(--size-small);
+  }
 }
 
 @media #{$mq-sidebar} {
-    header {
-        display: none;
-    }
+  header {
+    display: none;
+  }
 }

@@ -6,6 +6,6 @@ meta(property="og:type" content="website")
 - const metaDescription = data.metaDescription || /.*<p>(.*)<\/p>.*/.exec(data.body);
 - const firstP = metaDescription ? metaDescription[1] : false;
 if (firstP)
-    meta(name="description" content=metaDescription)
-    meta(name="og:description" content=metaDescription)
-    meta(property="og:title" content=data.title)
+  meta(name="description" content=metaDescription)
+  meta(name="og:description" content=metaDescription)
+  meta(property="og:title" content=data.title)
