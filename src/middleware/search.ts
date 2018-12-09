@@ -1,8 +1,8 @@
-import {MarkdownDocsSettings} from '..';
 import {Origami} from 'origami-core-lib';
+import {MarkdownDocsSettings} from '..';
 import {DocTree} from '../lib/DocTree';
 
-export default (
+export const search = (
   settings: MarkdownDocsSettings,
   tree: DocTree
 ): Origami.Server.RequestHandler => async (req, res, next) => {

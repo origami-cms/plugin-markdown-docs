@@ -2,10 +2,10 @@ import {Route} from 'origami-core-lib';
 import Server from 'origami-core-server';
 import path from 'path';
 import {DocTree} from './lib/DocTree';
-import mwCache from './middleware/cache';
-import getData from './middleware/getData';
-import render from './middleware/render';
-import search from './middleware/search';
+import {cache as mwCache} from './middleware/cache';
+import {getData} from './middleware/getData';
+import {render} from './middleware/render';
+import {search} from './middleware/search';
 
 export interface MarkdownDocsSettings {
   directory: string;
@@ -33,10 +33,11 @@ const DEFAULT_OPTIONS: MarkdownDocsSettings = {
 };
 const DEFAULT_CSS_HREF = '/docs/docs.css';
 
-module.exports = (app: Server, options = {}) => {
+module.exports = async(app: Server, options = {}) => {
   settings = { ...DEFAULT_OPTIONS, ...options };
 
   const tree = new DocTree(settings.directory, settings.prefix);
+  await tree.setup();
 
   // Statically host the public directory
   app.static(path.resolve(__dirname, '../public'), settings.prefix);

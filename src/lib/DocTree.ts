@@ -1,11 +1,8 @@
-const fs = require('fs');
-const path = require('path');
-const dt = require('directory-tree');
-const { startCase } = require('lodash');
-const { promisify } = require('util');
-const stat = promisify(fs.stat);
-const fsRead = promisify(fs.readFile);
-
+// @ts-ignore
+import dt from 'directory-tree';
+import fs from 'fs';
+import { startCase } from 'lodash';
+import lunr from 'lunr';
 import MarkdownIt from 'markdown-it';
 // @ts-ignore
 import markdownItAttrs from 'markdown-it-attrs';
@@ -15,9 +12,12 @@ import markdownItContainer from 'markdown-it-container';
 import markdownFrontMatter from 'markdown-it-front-matter';
 // @ts-ignore
 import markdownItNamedHeaders from 'markdown-it-named-headers';
-import { FrontMatterData } from '../middleware/getData';
 import { warn } from 'origami-core-lib';
-import lunr from 'lunr';
+import path from 'path';
+import { promisify } from 'util';
+import { FrontMatterData } from '../middleware/getData';
+const stat = promisify(fs.stat);
+const fsRead = promisify(fs.readFile);
 
 export interface TreeItem {
   name: string;
@@ -26,6 +26,7 @@ export interface TreeItem {
   filePath: string;
   children: TreeItem[];
 }
+// tslint:disable-next-line no-empty-interface
 export interface Tree extends TreeItem {}
 
 export interface RenderResult {
@@ -46,7 +47,7 @@ export interface DocPageCache {
 }
 
 export class DocTree {
-  tree?: Tree;
+  public tree?: Tree;
 
   private _readPromises: { [file: string]: Promise<string> } = {};
   private _readCache: DocReadCache = {};
@@ -55,12 +56,24 @@ export class DocTree {
 
   constructor(public directory: string, public prefix: string = '') {
     this._buildTree();
-    this._buildReadCache();
+  }
+
+  public async setup() {
+    if (!this.tree) return false;
+
+    const build = async (item: TreeItem) => {
+      const f = await this._sanitizeFilePath(item.path);
+      if (f) await this.read(f);
+
+      if (item.children) item.children.map(build.bind(this));
+    };
+
+    await build(this.tree);
   }
 
   // Reads a file from the cache, the current reading promise, or by creating
   // a new reading promise that will cache
-  async read(file: string, useCache: boolean = true): Promise<string> {
+  public async read(file: string, useCache: boolean = true): Promise<string> {
     const f = await this._sanitizeFilePath(file);
     if (!f) throw new Error(`File ${file} does not exist`);
 
@@ -71,7 +84,7 @@ export class DocTree {
     if (this._readPromises[f] && useCache) return this._readPromises[f];
 
     // File has never been read OR not using cache
-    return (this._readPromises[f] = new Promise(async res => {
+    return (this._readPromises[f] = new Promise(async (res) => {
       const data = (await fsRead(f)).toString();
       // Cache the read file
       this._readCache[f] = data;
@@ -79,7 +92,7 @@ export class DocTree {
     }));
   }
 
-  async search(query: string) {
+  public async search(query: string) {
     if (!query) return [];
 
     const data = await Promise.all(
@@ -90,15 +103,15 @@ export class DocTree {
       })
     );
 
-    const idx = lunr(function () {
+    const idx = lunr(function() {
       this.ref('path');
       this.field('markdown');
       this.metadataWhitelist = ['position'];
-      data.forEach(d => this.add(d));
+      data.forEach((d) => this.add(d));
     });
 
-    return idx.search(query).map(res => {
-      const item = data.find(d => d.path === res.ref)!;
+    return idx.search(query).map((res) => {
+      const item = data.find((d) => d.path === res.ref)!;
       return {
         url: item.path,
         title: item.item.title
@@ -106,15 +119,15 @@ export class DocTree {
     });
   }
 
-  fromPageCache(url: string) {
+  public fromPageCache(url: string) {
     return this._pageCache[url];
   }
 
-  setInPageCache(url: string, data: string) {
+  public setInPageCache(url: string, data: string) {
     this._pageCache[url] = data;
   }
 
-  clearCache() {
+  public clearCache() {
     this._pageCache = {};
     this._markdownCache = {};
     this._readCache = {};
@@ -123,7 +136,7 @@ export class DocTree {
 
   // Render the markdown file and cache the result and the FrontMatter data in
   // the _renderCache
-  async renderMarkdown(
+  public async renderMarkdown(
     file: string,
     useCache: boolean = true
   ): Promise<RenderResult | false> {
@@ -152,7 +165,7 @@ export class DocTree {
     });
     markdown.use(markdownItContainer, 'subtitle');
 
-    const html = await markdown.render(md);
+    const html = markdown.render(md);
 
     const result = { fmData, html };
     this._markdownCache[file] = result;
@@ -161,18 +174,20 @@ export class DocTree {
   }
 
   // Lookup node from the tree via the path
-  async lookupItem(p: string): Promise<TreeItem | false> {
+  public async lookupItem(p: string): Promise<TreeItem | false> {
     if (!this.tree) return false;
 
     let _path = await this._sanitizeFilePath(p);
     if (!_path) return false;
 
     _path = path.relative(this.directory, _path);
-    if (_path.endsWith('.md')) _path = _path.slice(0, -3);
+    const ext = -3;
+    if (_path.endsWith('.md')) _path = _path.slice(0, ext);
     const _p = _path.split('/');
 
     let cur: string | undefined;
     let nextPage: TreeItem | undefined = this.tree;
+    // tslint:disable-next-line no-conditional-assignment
     while ((cur = _p.shift()) && nextPage && nextPage.children) {
       nextPage = nextPage.children.find((c: any) => c.name === cur);
     }
@@ -206,7 +221,7 @@ export class DocTree {
       stats = await stat(_p);
       if (stats.isFile()) return _p;
     } catch {
-      /* Is a directory */
+      // Is a directory
     }
 
     // Try looking up p as directory
@@ -260,18 +275,5 @@ export class DocTree {
     map(tree);
 
     this.tree = tree;
-  }
-
-  private async _buildReadCache() {
-    if (!this.tree) return false;
-
-    const build = async (item: TreeItem) => {
-      const f = await this._sanitizeFilePath(item.path);
-      if (f) this.read(f);
-
-      if (item.children) item.children.map(build.bind(this));
-    };
-
-    await build(this.tree);
   }
 }

@@ -1,13 +1,13 @@
-import {MarkdownDocsSettings} from '..';
-import {Origami, Renderer} from 'origami-core-lib';
-import {parse} from 'url';
+import { Origami, Renderer } from 'origami-core-lib';
 import path from 'path';
-import {DocTree} from '../lib/DocTree';
+import { parse } from 'url';
+import { MarkdownDocsSettings } from '..';
+import { DocTree } from '../lib/DocTree';
 
 const TEMPLATE = path.resolve(__dirname, '../../templates/article.pug');
 const renderer = new Renderer();
 
-export default (
+export const render = (
   settings: MarkdownDocsSettings,
   tree: DocTree
 ): Origami.Server.RequestHandler => async (req, res, next) => {
@@ -18,13 +18,14 @@ export default (
     // Handle with origami-app-theme
     if (
       !page &&
-      // @ts-ignore
       (res.headersSent ||
         res.isPage ||
         !res.data ||
+        // @ts-ignore
         res.data.body === undefined)
     ) {
-      return next();
+      next();
+      return;
     }
 
     if (!page || settings.cache === false) {
@@ -40,7 +41,7 @@ export default (
       if (settings.cache) tree.setInPageCache(url, page);
     }
 
-    if (page) res.body = page as string;
+    if (page) res.body = page;
     next();
   } catch (e) {
     next(e);

@@ -11,7 +11,8 @@
     "build:ts": "tsc",
     "build:icons": "cp ./node_modules/origami-icons/icons.svg public/icons.svg",
     "build": "yarn build:ts & yarn build:sass & yarn build:icons",
-    "watch": "yarn build:ts -w & yarn build:sass -w"
+    "watch": "yarn build:ts -w & yarn build:sass -w",
+    "lint": "tslint -t stylish --project ./"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^7.1.2",
@@ -23,11 +24,11 @@
     "node-sass": "^4.9.3",
     "origami-icons": "^0.0.14",
     "tslint": "^5.11.0",
-    "tslint-config-origami": "^1.0.3",
     "typescript": "^3.0.3",
     "zen-css": "^1.1.15"
   },
   "dependencies": {
+    "@origami/tslint-config": "^0.0.3-alpha.3",
     "@types/marked": "^0.4.1",
     "directory-tree": "^2.1.0",
     "lodash": "^4.17.10",

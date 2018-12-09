@@ -1,7 +1,7 @@
 import {Origami} from 'origami-core-lib';
 import {DocTree} from '../lib/DocTree';
 
-export default (tree: DocTree): Origami.Server.RequestHandler => (
+export const cache = (tree: DocTree): Origami.Server.RequestHandler => (
   req,
   res,
   next

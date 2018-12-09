@@ -15,23 +15,32 @@ export interface FrontMatterData {
 }
 
 // Loads the data from DocTree and assigns to response
-export default (
+export const getData = (
   settings: MarkdownDocsSettings,
   tree: DocTree
 ): Origami.Server.RequestHandler => async (req, res, next) => {
   // Attempt to load from cache...
   const url = parse(req.originalUrl).pathname!;
-  if (await tree.fromPageCache(url)) return next();
+  if (tree.fromPageCache(url)) {
+    next();
+    return;
+  }
 
   // Find the item in the DocTree items
   const item = await tree.lookupItem(url);
-  if (!item) return next();
+  if (!item) {
+    next();
+    return;
+  }
 
   // Read the file
   const md = await tree.read(url);
   // Render the markdown
   const render = await tree.renderMarkdown(url);
-  if (!render) return next();
+  if (!render) {
+    next();
+    return;
+  }
   const { fmData, html: body } = render;
 
   // Set the Table of Contents from the markdown
@@ -51,8 +60,8 @@ export default (
   res.data = {
     title:
       headings && headings[0]
-        ? // @ts-ignore
-          headings[0].content
+        // @ts-ignore
+        ? headings[0].content
         : originalTitle,
     body,
     tree: tree.tree,
