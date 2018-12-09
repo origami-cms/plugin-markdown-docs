@@ -12,7 +12,7 @@ import markdownItContainer from 'markdown-it-container';
 import markdownFrontMatter from 'markdown-it-front-matter';
 // @ts-ignore
 import markdownItNamedHeaders from 'markdown-it-named-headers';
-import { warn } from 'origami-core-lib';
+import { warn } from '@origami/core';
 import path from 'path';
 import { promisify } from 'util';
 import { FrontMatterData } from '../middleware/getData';

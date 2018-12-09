@@ -1,11 +1,10 @@
-import {Route} from 'origami-core-lib';
-import Server from 'origami-core-server';
+import { Route, Server } from '@origami/core';
 import path from 'path';
-import {DocTree} from './lib/DocTree';
-import {cache as mwCache} from './middleware/cache';
-import {getData} from './middleware/getData';
-import {render} from './middleware/render';
-import {search} from './middleware/search';
+import { DocTree } from './lib/DocTree';
+import { cache as mwCache } from './middleware/cache';
+import { getData } from './middleware/getData';
+import { render } from './middleware/render';
+import { search } from './middleware/search';
 
 export interface MarkdownDocsSettings {
   directory: string;

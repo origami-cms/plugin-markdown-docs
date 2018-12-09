@@ -1,7 +1,7 @@
+import {Origami} from '@origami/core';
 import {startCase} from 'lodash';
 // @ts-ignore
 import toc from 'markdown-toc';
-import {Origami} from 'origami-core-lib';
 import {parse} from 'url';
 import {MarkdownDocsSettings} from '..';
 import {DocTree} from '../lib/DocTree';
@@ -57,7 +57,7 @@ export const getData = (
     nextPage = await tree.lookupItem(fmData.next);
   }
 
-  res.data = {
+  const data = {
     title:
       headings && headings[0]
         // @ts-ignore
@@ -81,9 +81,11 @@ export const getData = (
 
   // Used for origami-app-theme
   if (settings.themeTemplate) {
-    res.isPage = true;
-    res.data.type = settings.themeTemplate;
+    res.locals.isPage = true;
+    data.type = settings.themeTemplate;
   }
+
+  res.locals.content.set(data);
 
   next();
 };
