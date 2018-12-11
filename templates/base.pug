@@ -3,27 +3,19 @@ html(lang="en")
   head
     include partials/meta
 
-
     title= data.title
     script(src="https://unpkg.com/@webcomponents/webcomponentsjs@2.0.0/webcomponents-loader.js")
 
-
-    link(rel="stylesheet", href=data.css)
-    link(rel="stylesheet", href="/docs/prism.css")
+    block links
+      link(rel="stylesheet", href=data.css)
+      link(rel="stylesheet", href="/docs/prism.css")
 
     include partials/colorStyles
   body
     <zen-icon-set></zen-icon-set>
 
-    header
 
-    include partials/header
-
-    include partials/sidebar
-
-    include partials/article
-
-    footer
+    block body
 
 
     script(src="/docs/zen/IconSet.js")

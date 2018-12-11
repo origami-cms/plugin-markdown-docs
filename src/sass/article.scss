@@ -1,0 +1,42 @@
+@import 'zen-css/import';
+
+article.article {
+  ul,
+  ol {
+    padding-left: var(--size-small);
+
+    li {
+      display: list-item;
+      line-height: 2;
+    }
+  }
+
+  ul li:before {
+    content: '';
+    display: inline-block;
+    width: calc(var(--size-tiny) / 2);
+    height: calc(var(--size-tiny) / 2);
+    border-radius: 50%;
+    background: white;
+    border: 2px solid var(--color-grey-300);
+    box-shadow: 0 0.1rem 0.2rem var(--color-grey-200);
+    margin-left: calc(var(--size-small) * -1);
+    margin-right: calc(var(--size-tiny) * 1);
+  }
+
+  ol li {
+    list-style: decimal;
+  }
+
+  p + ul,
+  p + ol {
+    transform: translateY(calc(var(--size-tiny) * -1));
+  }
+
+  & > img,
+  & > p > img {
+    max-width: 100%;
+    @extend %rounded;
+    border: var(--border-200);
+  }
+}

@@ -1,0 +1,92 @@
+small.optional {
+  border-radius: var(--border-radius); }
+
+article .list li {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden; }
+
+article h3, article h5 {
+  margin-bottom: var(--size-tiny); }
+
+article .block {
+  margin-bottom: var(--size-main); }
+
+article section {
+  padding-bottom: var(--size-small);
+  border-bottom: var(--border-200); }
+
+article .list li {
+  display: grid;
+  grid-template-columns: var(--size-main) var(--size-super) auto var(--size-huge);
+  align-items: center;
+  min-height: var(--size-main);
+  grid-template-rows: var(--size-main) auto; }
+  article .list li p.description {
+    grid-column: 3 / 5;
+    font-size: var(--font-size-small);
+    white-space: normal;
+    margin-bottom: var(--size-tiny); }
+  article .list li span.defaultValue {
+    grid-column: 3 / 5;
+    font-size: var(--font-size-small);
+    white-space: normal;
+    margin-bottom: var(--size-tiny); }
+    article .list li span.defaultValue code {
+      padding: 0.25rem 0.5rem;
+      font-size: var(--font-size-tiny); }
+
+article pre {
+  margin: var(--size-tiny) 0; }
+
+article .title {
+  position: relative; }
+  article .title .link {
+    position: absolute;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    transition: var(--transition-time); }
+    article .title .link:hover {
+      opacity: 1; }
+  article .title:hover .link {
+    opacity: 0.25; }
+
+span.type {
+  font-style: italic;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-small);
+  color: var(--color-grey-300); }
+  span.type span.list {
+    color: var(--color-orange); }
+  span.type.reference {
+    color: var(--color-blue); }
+  span.type.union {
+    color: var(--color-grey-200); }
+
+small.optional {
+  height: var(--size-medium);
+  line-height: var(--size-medium);
+  font-size: var(--font-size-small, 1.4rem);
+  padding: 0 var(--size-tiny);
+  text-transform: lowercase;
+  background: var(--color-grey-200);
+  margin-right: 0.5rem;
+  opacity: 0.5; }
+
+.list {
+  margin-bottom: var(--size-main); }
+
+.constructor h4 {
+  margin-top: var(--size-small);
+  margin-bottom: var(--size-tiny); }
+
+p.description {
+  margin-bottom: var(--size-tiny); }
+
+small.source {
+  display: block;
+  font-size: var(--font-size-tiny);
+  margin-bottom: var(--size-tiny); }
+  small.source, small.source a {
+    color: var(--color-grey-300); }

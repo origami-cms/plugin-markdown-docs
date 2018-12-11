@@ -1,8 +1,19 @@
+mixin sidebar-headings(headings, depth)
+  for heading in headings.filter(h => (h.lvl === 2) || (h.lvl === 3))
+    li
+      a(class=`depth-${depth + 1} h${heading.lvl}` href=`#${heading.slug}`)
+        if (heading.type)
+          +icon(heading.type)
+        != heading.content
+      if (heading.children)
+        +sidebar-headings(heading.children, depth + 1)
+
+
 mixin sidebar-item(item, depth=0)
   - const open = data.url.startsWith(item.path)
   - const active = data.url === item.path
-
   - const topLink = data.headings ? data.headings[0].slug : '';
+
   li
     if (active)
       a.active(class=`depth-${depth}` href=`#${topLink}`)= item.title
@@ -13,27 +24,23 @@ mixin sidebar-item(item, depth=0)
       ul
         for child in item.children
           +sidebar-item(child, depth + 1)
-    if (active && item.type === 'file' && data.headings)
+
+    if (active && data.headings)
       ul.toc
-        for heading in data.headings.filter(h => h.lvl === 2)
-          li
-            a(class=`depth-${depth + 1} h${heading.lvl}` href=`#${heading.slug}`)= heading.content
+        +sidebar-headings(data.headings, depth)
+
 
 aside.card
-  if (data.logo)
-    img.logo.align-middle(src=data.logo alt="Logo")
-  if (data.siteTitle)
-    span.title.align-middle= data.siteTitle
+  if (data.logo || data.siteTitle)
+    a(href=(data.docsRoot || '/'))
+      if (data.logo)
+        img.logo.align-middle(src=data.logo alt="Logo")
+      if (data.siteTitle)
+        span.title.align-middle= data.siteTitle
 
   button.hollow.float-right.margin-small
     zen-icon(color="grey-300" type="cross" onclick="document.querySelector('aside').classList.toggle('active')")
 
   ul
-    //- Don't show the root tree node (results in many 1st level items)
-    if (data.sidebarSkipRoot && data.tree.children)
-      for child in data.tree.children
-        +sidebar-item(child)
-
-    //- Include the root tree node (results in only 1 1st level item)
-    else
-      +sidebar-item(data.tree)
+    for Doc, value in data.tree
+      +sidebar-item(Doc)

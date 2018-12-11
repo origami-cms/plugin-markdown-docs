@@ -1,0 +1,16 @@
+extends ../base
+
+append links
+  link(rel="stylesheet", href="/docs/index.css")
+
+block body
+  section.title
+    .wrapper
+
+      h1.margin-b-large
+        img(src="/origami/logo.svg").size-large.align-middle.margin-r-small
+        span.align-middle Origami Documentation
+
+      nav.grid
+        for child in data.tree
+          a.card(href=child.path)= child.title

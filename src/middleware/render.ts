@@ -1,44 +1,38 @@
-import { Origami, Renderer } from '@origami/core';
-import path from 'path';
-import { parse } from 'url';
+import { Origami } from '@origami/core';
 import { MarkdownDocsSettings } from '..';
-import { DocTree } from '../lib/DocTree';
-
-const TEMPLATE = path.resolve(__dirname, '../../templates/article.pug');
-const renderer = new Renderer();
+import { DocPage } from '../lib/DocTree/Docs/DocPage';
+import { DocTree } from '../lib/DocTree/DocTree';
 
 export const render = (
   settings: MarkdownDocsSettings,
   tree: DocTree
 ): Origami.Server.RequestHandler => async (req, res, next) => {
   try {
-    const url = parse(req.originalUrl).pathname!;
-    let page = tree.fromPageCache(url);
-    const data = res.locals.content.get();
+    const data = res.locals.content.get() as any;
+    const doc = data.currentDoc as DocPage;
 
-    // Handle with origami-app-theme
-    if (!page && (res.headersSent || res.locals.isPage || !data)) {
+
+    if (doc && doc.rendered && !data) {
+      res.locals.content.set(doc.cache!);
       next();
       return;
     }
 
-    if (!page || settings.cache === false) {
-      page = (await renderer.render(TEMPLATE, { data })) as string;
-
-      // Hack for adding Prism.js' .command-line class to all bash
-      // <pre>'s and <code>'s
-      page = page.replace(
-        /class="\s*language-bash"/gm,
-        'class="command-line language-bash"'
-      );
-
-      if (settings.cache) tree.setInPageCache(url, page);
+    // Handle with origami-app-theme
+    if (res.headersSent || res.locals.isPage || !data || !doc) {
+      next();
+      return;
     }
 
-    if (page) {
+    let renderResult;
+    renderResult = await doc.render(data || {}, settings.cache);
+
+    if (renderResult) {
       res.locals.content.clear();
-      res.locals.content.set(page);
+      // res.contentType('html');
+      res.locals.content.set(renderResult);
     }
+
     next();
   } catch (e) {
     next(e);

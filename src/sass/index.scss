@@ -1,0 +1,39 @@
+@import 'zen-css/import';
+
+section.title {
+  position: relative;
+  background-image: url('/origami/waves.svg');
+  background-size: 80rem;
+  padding: var(--size-super) var(--size-main);
+  text-align: center;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, var(--color-bg));
+  }
+
+  & > * {
+    position: relative;
+  }
+}
+
+@media #{$mq-tiny-up} {
+  section.title {
+    h1 img {
+      display: block;
+      margin: auto;
+    }
+  }
+}
+@media #{$mq-large-up} {
+  section.title {
+    h1 img {
+      display: inline-block;
+    }
+  }
+}

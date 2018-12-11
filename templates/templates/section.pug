@@ -1,0 +1,15 @@
+extends document
+include ../partials/api
+
+append links
+  link(rel="stylesheet", href="/docs/section.css")
+
+append documentBody
+  -const doc = data.currentDoc
+
+  article
+    h1= doc.title
+
+    nav.grid
+      for child in data.currentDoc.children
+        a.card(href=child.path)= child.title

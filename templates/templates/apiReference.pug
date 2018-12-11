@@ -1,0 +1,31 @@
+extends document
+include ../partials/api
+
+append links
+  link(rel="stylesheet", href="/docs/api.css")
+
+append documentBody
+  -
+    const docs = data.data
+    const classes = docs.children.filter(c =>
+      c.kindString === 'Class' && !c.name.startsWith('Error')
+    )
+    const errors = docs.children.filter(c =>
+      c.kindString === 'Class' && c.name.startsWith('Error')
+    )
+    const methods = docs.children.filter(c => c.kindString === 'Function')
+
+  article.api-reference
+    h1= docs.name
+
+    h2#classes Classes
+    for c in classes
+      +class(docs, c)
+
+    h2#functions Functions
+    for m in methods
+      +method(docs, m)
+
+    h2#errors Errors
+    for e in errors
+      +class(docs, e, 'error')

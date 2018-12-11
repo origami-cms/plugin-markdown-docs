@@ -1,13 +1,16 @@
 import { Route, Server } from '@origami/core';
 import path from 'path';
-import { DocTree } from './lib/DocTree';
+import { DocTree } from './lib/DocTree/DocTree';
+import { DocTreeIncludeItem } from './lib/DocTree/DocTree.types';
 import { cache as mwCache } from './middleware/cache';
 import { getData } from './middleware/getData';
+import { indexPage } from './middleware/indexPage';
+import { injectSettings } from './middleware/injectSettings';
 import { render } from './middleware/render';
 import { search } from './middleware/search';
 
 export interface MarkdownDocsSettings {
-  directory: string;
+  include: DocTreeIncludeItem[];
   prefix: string;
   themeTemplate?: string | false;
   cssFile?: string;
@@ -21,9 +24,8 @@ export interface MarkdownDocsSettings {
 
 let settings: MarkdownDocsSettings;
 
-const DEFAULT_OPTIONS: MarkdownDocsSettings = {
+const DEFAULT_OPTIONS: Partial<MarkdownDocsSettings> = {
   prefix: '/docs',
-  directory: path.resolve(process.cwd(), 'docs'),
   themeTemplate: false,
   cssFile: path.resolve(__dirname, './docs.css'),
   sidebarSkipRoot: true,
@@ -32,27 +34,14 @@ const DEFAULT_OPTIONS: MarkdownDocsSettings = {
 };
 const DEFAULT_CSS_HREF = '/docs/docs.css';
 
-module.exports = async(app: Server, options = {}) => {
+module.exports = async (app: Server, options = {}) => {
   settings = { ...DEFAULT_OPTIONS, ...options };
 
-  const tree = new DocTree(settings.directory, settings.prefix);
+  const tree = new DocTree({
+    include: settings.include,
+    prefix: settings.prefix
+  });
   await tree.setup();
-
-  // Statically host the public directory
-  app.static(path.resolve(__dirname, '../public'), settings.prefix);
-
-  const r = new Route(`${settings.prefix}/*`)
-    // If the /xyz?nocache query string is present, clear the cache for that URL
-    .position('pre-store')
-    .get(mwCache(tree))
-
-    // Attempts to lookup an article in the docs folder, and stores to the response
-    .position('store')
-    .get(getData(settings, tree))
-
-    // If there is an article in the response.data, render it or pass off to origami-app-theme
-    .position('render')
-    .get(render(settings, tree));
 
   // If there's a path to a custom css file given, host it statically
   if (settings.cssFile && !settings.cssHREF) {
@@ -62,10 +51,45 @@ module.exports = async(app: Server, options = {}) => {
     app.useRouter(cssRoute);
   }
 
-  const searchRoute = new Route('/api/v1/docs/search').get(
-    search(settings, tree)
+  // Inject the settings and data into all doc routes
+  app.useRouter(
+    new Route(new RegExp(`^${settings.prefix}`))
+    // new Route(`${settings.prefix}/*`)
+      .position('init')
+      .use(injectSettings(settings, tree))
+
+      // Attempts to lookup an article in the docs folder, and stores to the response
+      .position('store')
+      .get(getData(settings, tree))
   );
 
-  app.useRouter(r);
-  app.useRouter(searchRoute);
+  // Render the index page
+  app.useRouter(
+    new Route(`${settings.prefix}`)
+      .position('render')
+      .get(indexPage(settings, tree))
+  );
+
+  // Statically host the public directory
+  // @ts-ignore
+  app.static(
+    path.resolve(__dirname, '../public'),
+    settings.prefix,
+    'post-render'
+  );
+
+  // Render the doc pages
+  app.useRouter(
+    new Route(`${settings.prefix}/*`)
+      // If the /xyz?nocache query string is present, clear the cache for that URL
+      .position('pre-store')
+      .get(mwCache(tree))
+
+      // If there is an article in the response.data, render it or pass off to origami-app-theme
+      .position('post-render')
+      .get(render(settings, tree))
+  );
+
+  // Search route
+  app.useRouter(new Route('/api/v1/docs/search').get(search(settings, tree)));
 };

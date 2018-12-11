@@ -1,6 +1,6 @@
 import {Origami} from '@origami/core';
 import {MarkdownDocsSettings} from '..';
-import {DocTree} from '../lib/DocTree';
+import {DocTree} from '../lib/DocTree/DocTree';
 
 export const search = (
   settings: MarkdownDocsSettings,

@@ -1,0 +1,41 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--section-cols), 1fr);
+  grid-gap: var(--section-padding);
+
+  .card {
+    border: var(--border-100);
+    box-shadow: 0 0.25rem 0.5rem var(--color-main-soft);
+    transition: all calc(var(--transition-time) / 2) ease-in-out;
+    color: var(--color-blue);
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-align: center;
+
+    &:hover {
+      // box-shadow: 0 1rem 2rem var(--color-main-soft);
+      box-shadow: var(--card-shadow);
+      transform: translateY(-0.25rem);
+    }
+  }
+}
+
+@media #{$mq-tiny-up} {
+  .grid {
+    --section-cols: 1;
+    --card-padding: 2rem;
+    --section-padding: 2rem;
+  }
+}
+@media #{$mq-medium-up} {
+  .grid {
+    --section-cols: 2;
+  }
+}
+@media #{$mq-huge-up} {
+  .grid {
+    --card-padding: 4rem;
+    --section-cols: 3;
+  }
+}

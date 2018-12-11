@@ -1,12 +1,6 @@
-import {Origami} from '@origami/core';
-import {startCase} from 'lodash';
-// @ts-ignore
-import toc from 'markdown-toc';
-import {parse} from 'url';
-import {MarkdownDocsSettings} from '..';
-import {DocTree} from '../lib/DocTree';
-
-const DEFAULT_CSS_HREF = '/docs/docs.css';
+import { Origami } from '@origami/core';
+import { MarkdownDocsSettings } from '..';
+import { DocTree } from '../lib/DocTree/DocTree';
 
 export interface FrontMatterData {
   title?: string;
@@ -19,73 +13,45 @@ export const getData = (
   settings: MarkdownDocsSettings,
   tree: DocTree
 ): Origami.Server.RequestHandler => async (req, res, next) => {
+  const {url} = res.locals.docsData;
+
+  // Find the item in the DocTree docs
+  const doc = tree.lookupItem(url);
+
+  if (doc) res.locals.docsData.currentDoc = doc;
+
   // Attempt to load from cache...
-  const url = parse(req.originalUrl).pathname!;
-  if (tree.fromPageCache(url)) {
+  if (!doc || (doc && doc.rendered)) {
+    // If skipping parsing, set the current doc data to content
+    if (doc) {
+      res.locals.content.set({
+        ...res.locals.docsData
+      });
+    }
     next();
     return;
   }
 
-  // Find the item in the DocTree items
-  const item = await tree.lookupItem(url);
-  if (!item) {
-    next();
-    return;
-  }
 
-  // Read the file
-  const md = await tree.read(url);
+  // Parse the file
+  const parsed = await doc.parse(settings);
+
   // Render the markdown
-  const render = await tree.renderMarkdown(url);
-  if (!render) {
+  if (!parsed.parsed) {
     next();
     return;
   }
-  const { fmData, html: body } = render;
-
-  // Set the Table of Contents from the markdown
-  let headings: object[] | false = toc(md).json;
-  const originalTitle = startCase(item.title);
-  if (!(headings as object[]).length) headings = false;
-
-  let prevPage;
-  let nextPage;
-  if (typeof fmData.prev === 'string') {
-    prevPage = await tree.lookupItem(fmData.prev);
-  }
-  if (typeof fmData.next === 'string') {
-    nextPage = await tree.lookupItem(fmData.next);
-  }
-
-  const data = {
-    title:
-      headings && headings[0]
-        // @ts-ignore
-        ? headings[0].content
-        : originalTitle,
-    body,
-    tree: tree.tree,
-    css: settings.cssHREF || DEFAULT_CSS_HREF,
-    headings,
-    url,
-    siteTitle: settings.siteTitle,
-    sidebarSkipRoot: settings.sidebarSkipRoot,
-    logo: settings.logo,
-    colors: settings.colors,
-    prevPage,
-    nextPage,
-
-    // Extend with data from front matter header
-    ...fmData
-  } as { [key: string]: any };
 
   // Used for origami-app-theme
   if (settings.themeTemplate) {
     res.locals.isPage = true;
-    data.type = settings.themeTemplate;
+    parsed.parsed.type = settings.themeTemplate;
   }
 
-  res.locals.content.set(data);
+  res.locals.content.set({
+    ...res.locals.docsData,
+    ...parsed.parsed
+  });
 
   next();
 };

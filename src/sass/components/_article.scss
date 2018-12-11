@@ -1,119 +1,9 @@
 article {
   position: relative;
+  min-height: 100vh;
   padding: var(--size-small) var(--size-main);
   max-width: 80rem;
   background: var(--color-white);
-
-  a {
-    color: var(--color-alt);
-    text-decoration: underline;
-  }
-
-  h1 {
-    margin-bottom: var(--size-main);
-  }
-
-  h2 {
-    margin-top: var(--size-huge);
-    margin-bottom: var(--size-small);
-  }
-
-  h3 {
-    margin-top: var(--size-large);
-    margin-bottom: var(--size-small);
-  }
-
-  h4 {
-    text-transform: uppercase;
-  }
-
-  // Sub title
-  h1 + .subtitle {
-    margin-top: calc(var(--size-main) * -1);
-    color: var(--color-grey-500);
-    margin-bottom: var(--size-large);
-    font-size: var(--h2-font-size);
-  }
-
-  strong {
-    letter-spacing: 0;
-  }
-
-  p {
-    line-height: 2;
-    margin-bottom: var(--size-small);
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-
-  pre {
-    margin: var(--size-medium) 0;
-  }
-
-  code {
-    background-color: var(--prism-bg);
-    @extend %rounded;
-    padding: calc(var(--size-tiny) / 4) calc(var(--size-tiny) / 2);
-    font-family: var(--font-family-mono);
-    color: var(--prism-text);
-    font-size: var(--font-size-small);
-  }
-
-  blockquote {
-    @extend %rounded;
-    padding: var(--size-small) var(--size-main);
-    border: 1px solid var(--color-active);
-    background: var(--color-active-soft);
-    margin-left: calc(var(--size-small) * -1);
-    margin-right: calc(var(--size-small) * -1);
-    box-shadow: none;
-    margin-top: var(--size-large);
-
-    h2 {
-      margin-top: 0;
-      margin-left: calc(var(--size-small) * -1);
-    }
-  }
-
-  ul,
-  ol {
-    padding-left: var(--size-small);
-
-    li {
-      display: list-item;
-      line-height: 2;
-    }
-  }
-
-  ul li:before {
-    content: '';
-    display: inline-block;
-    width: calc(var(--size-tiny) / 2);
-    height: calc(var(--size-tiny) / 2);
-    border-radius: 50%;
-    background: white;
-    border: 2px solid var(--color-grey-300);
-    box-shadow: 0 0.1rem 0.2rem var(--color-grey-200);
-    margin-left: calc(var(--size-small) * -1);
-    margin-right: calc(var(--size-tiny) * 1);
-  }
-
-  ol li {
-    list-style: decimal;
-  }
-
-  p + ul,
-  p + ol {
-    transform: translateY(calc(var(--size-tiny) * -1));
-  }
-
-  & > img,
-  & > p > img {
-    max-width: 100%;
-    @extend %rounded;
-    border: var(--border-200);
-  }
 
   a.made-by {
     display: block;
@@ -153,3 +43,5 @@ article {
     margin-left: calc(var(--sidebar-width) + var(--size-main));
   }
 }
+
+

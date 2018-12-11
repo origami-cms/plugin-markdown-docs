@@ -1,0 +1,208 @@
+mixin icon(type)
+  img.i.small.margin-r-tiny(
+    src=`/docs/images/icons/${type}.svg`
+    alt=type
+    title=type
+  )
+
+mixin description(obj)
+  if (obj.comment && obj.comment.shortText)
+      p.description= obj.comment.shortText
+
+mixin defaultValue(obj)
+  if (obj.defaultValue)
+      span.defaultValue
+        strong Default value:&nbsp;
+        code.language-typescript=obj.defaultValue
+
+
+mixin source(module, obj)
+  - const srcDir = 'src';
+  - const file = obj.sources[0].fileName;
+  - const line = obj.sources[0].line;
+  - const path = [module.name, srcDir, file].join('/');
+  - const package = module.name.split('/').pop();
+  - const externalLink = `https://github.com/origami-cms/cms/blob/master/packages/${package}/${srcDir}/${file}#L${line}`
+
+  if (obj.sources && obj.sources[0])
+      small.source Defined in&nbsp;
+        a(href=externalLink target="_blank") #{path}:#{line}
+
+
+mixin type(type)
+  case type.type
+    when "intrinsic"
+      span.type.intrinsic= type.name
+
+    when "reference"
+      span.type.reference= type.name
+        if (type.typeArguments)
+          span.list
+            |<
+            for t, index in type.typeArguments
+              +type(t)
+              if (index != type.typeArguments.length - 1)
+                | &nbsp;|&nbsp;
+            |>
+
+    when "union"
+      span.type.union
+        for union, index in type.types
+          +type(union)
+          if (index != type.types.length - 1)
+            | &nbsp;|&nbsp;
+
+    when "array"
+      span.type.array
+        +type(type.elementType)
+        | []
+
+    when "reflection"
+      span.type.reflection= type.name
+
+    when "stringLiteral"
+      span.type.stringLiteral= type.value
+
+
+mixin parameterArgs(params)
+  ul.parameters-args
+    for p, index in params
+      li
+        |#{p.name}
+        if (p.flags && p.flags.isOptional)
+          |?
+        |:&nbsp;
+        +type(p.type)
+        if (index != params.length - 1)
+          |,&nbsp;
+
+
+mixin parameterList(params, returns)
+  ul.list
+    for p in params
+      li
+        +icon('argument')
+        strong.ellipsis(title=p.name) #{p.name}:&nbsp;
+        +type(p.type)
+
+        if (p.flags && p.flags.isOptional)
+          small.optional Optional
+
+        +description(p)
+        +defaultValue(p)
+
+    if (returns)
+      li
+        +icon('return')
+        strong.color-grey-300 returns:&nbsp;
+        +type(returns)
+
+
+mixin title(module, obj, type = false, parent = false)
+  -
+    const _type = type || obj.kindString.toLowerCase();
+    let color;
+    let icon = _type;
+    let tag;
+    let id = obj.name;
+    if (parent) id = `${parent.name}.${id}`;
+
+  case _type
+    when 'class'
+      -
+        color = 'blue';
+        tag = 'h3';
+
+    when 'method'
+    when 'function'
+      -
+        icon = 'method';
+        color = 'main';
+        tag = 'h5';
+
+    when 'error'
+      -
+        color = 'error';
+        tag = 'h3';
+
+  .block.title(id=id)
+    a(href=`#${id}`).link
+      zen-icon(type="editor-link" size="medium" color="main")
+
+    #{tag}(class=`color-${color}`)
+        +icon(icon)
+        span= obj.name
+
+    +source(module, obj)
+    +description(obj)
+
+    block
+
+
+mixin constructorSignature(c, constructor)
+  h4(id=`${c.name}-constructor`) Constructor
+  pre
+    code.language-typescript
+      span #{constructor.name}(
+      if (constructor.parameters)
+        +parameterArgs(constructor.parameters)
+      |)
+
+
+mixin method(module, method, c = false)
+  if method.signatures && method.signatures[0]
+    -const signature = method.signatures[0]
+
+    .block.method
+      +title(module, method, false, c)
+        pre
+          code.language-typescript
+            span #{c ? `${c.name}.` : ''}#{signature.name}(
+            if (signature.parameters)
+              +parameterArgs(signature.parameters)
+            |)
+            if (signature.type)
+              |:&nbsp;
+              +type(signature.type)
+
+        if (method.signatures && method.signatures[0].parameters)
+          +parameterList(method.signatures[0].parameters, signature.type)
+
+
+
+
+
+mixin class(module, c, type="class")
+  - const properties = c.children.filter(c => c.kindString === 'Property')
+  - const constructor = c.children.find(c => c.kindString === 'Constructor')
+  - const methods = c.children.filter(c => c.kindString === 'Method')
+  - const id = `${c.name}-`;
+
+  section.class
+    +title(module, c, type)
+
+    if (constructor)
+      .block.constructor
+        +constructorSignature(c, constructor.signatures[0])
+
+        if (constructor.signatures && constructor.signatures[0].parameters)
+          +parameterList(constructor.signatures[0].parameters)
+
+    if (properties.length)
+      .block.properties
+        h4(id=`${id}properties`) Properties
+        ul.list
+          for prop in properties
+            li(id=`${c.name}.${prop.name}`)
+              img(src="/docs/images/icons/property.svg").i.small.margin-r-tiny
+              strong #{prop.name}:
+              +type(prop.type)
+
+    if (methods && methods.length)
+      .block.methods
+        h4.margin-b-tiny(id=`${id}methods`) Methods
+        for method in methods
+          +method(module, method, c)
+
+
+
