@@ -1,7 +1,7 @@
 // @ts-ignore
 import { colors } from '@origami/core';
 import dt from 'directory-tree';
-import fs, { Stats } from 'fs-extra';
+import fs, { Stats } from 'fs';
 import _ from 'lodash';
 import lunr from 'lunr';
 import path from 'path';
